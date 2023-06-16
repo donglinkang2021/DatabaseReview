@@ -1,0 +1,1773 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="linkdom" name="author"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.5.2" name="generator"/>
+<title>四、SQL - 数据库复习</title>
+<link href="../../../assets/stylesheets/main.9f9400aa.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../mkdocs/css/unordered-list-symbols.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="orange" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#sql">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="数据库复习" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            数据库复习
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              四、SQL
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"></path></svg>
+</label>
+</form>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      README
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../DailyNote/">
+      DailyNote
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+      最后一套题总结
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        试题分析
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        课本复习
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="数据库复习" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    数据库复习
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        README
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../DailyNote/">
+        DailyNote
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+        最后一套题总结
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          试题分析
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="试题分析" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          试题分析
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        各个题型及对应知识点分析
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/1.%E5%A1%AB%E7%A9%BA%E9%A2%98/">
+        1.填空题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/2.%E5%88%A4%E6%96%AD%E9%A2%98/">
+        2.判断题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/3.%E5%8D%95%E9%A1%B9%E9%80%89%E6%8B%A9%E9%A2%98/">
+        3.单项选择题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/4.%E7%AE%80%E7%AD%94%E9%A2%98/">
+        4.简答题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/5.%E7%BB%BC%E5%90%88%E9%A2%98/">
+        5.综合题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/6.%E8%AE%BE%E8%AE%A1%E9%A2%98/">
+        6.设计题
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          课本复习
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="课本复习" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          课本复习
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_1" id="__nav_5_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_1">
+          01数据库系统引论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="01数据库系统引论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_1">
+<span class="md-nav__icon md-icon"></span>
+          01数据库系统引论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review_detail/">
+        一、数据库系统引论
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/snippet/">
+        一、数据库系统引论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_2" id="__nav_5_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_2">
+          02数据模型
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="02数据模型" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_2">
+<span class="md-nav__icon md-icon"></span>
+          02数据模型
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/snippet/">
+        二、数据模型
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_3" id="__nav_5_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_3">
+          03关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="03关系数据库" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_3">
+<span class="md-nav__icon md-icon"></span>
+          03关系数据库
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/snippet/">
+        三、关系数据库
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4">
+          04SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="04SQL" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
+<span class="md-nav__icon md-icon"></span>
+          04SQL
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          四、SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        四、SQL
+      </a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_1">
+    SQL简介
+  </a>
+<nav aria-label="SQL简介" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_2">
+    SQL的特点
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_3">
+    SQL的系统结构
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+    数据定义
+  </a>
+<nav aria-label="数据定义" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    建立索引
+  </a>
+<nav aria-label="建立索引" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    索引选择
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    查询
+  </a>
+<nav aria-label="查询" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    单表查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    空值
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    使用集函数
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    对查询结果分组
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#outer-join">
+    外连接（Outer Join）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    嵌套查询概述
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    嵌套查询分类及求解方法
+  </a>
+<nav aria-label="嵌套查询分类及求解方法" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    不相关子查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    相关子查询
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    引出子查询的谓词
+  </a>
+<nav aria-label="引出子查询的谓词" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anyall">
+    带有ANY或ALL谓词的子查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#exists">
+    带有EXISTS谓词的子查询
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#select">
+    SELECT语句的一般格式
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    插入数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    修改数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    删除数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    视图
+  </a>
+<nav aria-label="视图" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    视图的定义
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    建立视图
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    视图上的操作
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_21">
+    更新
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_22">
+    更新视图的限制
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_23">
+    视图的优点
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_4">
+    SQL的数据控制
+  </a>
+<nav aria-label="SQL的数据控制" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_24">
+    授权
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_25">
+    权限回收
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_5">
+    嵌入式SQL
+  </a>
+<nav aria-label="嵌入式SQL" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_6">
+    将SQL语句嵌入到宿主语言中必须解决的问题
+  </a>
+<nav aria-label="将SQL语句嵌入到宿主语言中必须解决的问题" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_26">
+    数据库和主语言程序间的数据交换
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_27">
+    需要协调面向集合和面向记录两种不同的处理方式
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_5" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5">
+          05查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="05查询处理和查询优化" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
+<span class="md-nav__icon md-icon"></span>
+          05查询处理和查询优化
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/snippet/">
+        五、查询处理和查询优化
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_6" id="__nav_5_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_6">
+          06数据库的安全性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="06数据库的安全性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_6">
+<span class="md-nav__icon md-icon"></span>
+          06数据库的安全性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/snippet/">
+        六、数据库的安全性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_7" id="__nav_5_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_7">
+          07数据库的完整性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="07数据库的完整性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_7">
+<span class="md-nav__icon md-icon"></span>
+          07数据库的完整性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/snippet/">
+        七、数据库的完整性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_8" id="__nav_5_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_8">
+          08数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="08数据库恢复技术" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_8">
+<span class="md-nav__icon md-icon"></span>
+          08数据库恢复技术
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/snippet/">
+        八、数据库恢复技术
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_9" id="__nav_5_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_9">
+          09并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="09并发控制" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_9">
+<span class="md-nav__icon md-icon"></span>
+          09并发控制
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/snippet/">
+        九、并发控制
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_10" id="__nav_5_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_10">
+          10关系数据库设计理论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="10关系数据库设计理论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_10">
+<span class="md-nav__icon md-icon"></span>
+          10关系数据库设计理论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/snippet/">
+        十、关系数据库设计理论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_11" id="__nav_5_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_11">
+          11数据库设计
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="11数据库设计" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_11">
+<span class="md-nav__icon md-icon"></span>
+          11数据库设计
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/snippet/">
+        十一、数据库设计
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_12" id="__nav_5_12" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_12">
+          12数据库编程
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="12数据库编程" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_12">
+<span class="md-nav__icon md-icon"></span>
+          12数据库编程
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/snippet/">
+        十二、数据库编程
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_1">
+    SQL简介
+  </a>
+<nav aria-label="SQL简介" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_2">
+    SQL的特点
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_3">
+    SQL的系统结构
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+    数据定义
+  </a>
+<nav aria-label="数据定义" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    建立索引
+  </a>
+<nav aria-label="建立索引" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    索引选择
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    查询
+  </a>
+<nav aria-label="查询" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    单表查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    空值
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    使用集函数
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    对查询结果分组
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#outer-join">
+    外连接（Outer Join）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    嵌套查询概述
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    嵌套查询分类及求解方法
+  </a>
+<nav aria-label="嵌套查询分类及求解方法" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    不相关子查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    相关子查询
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    引出子查询的谓词
+  </a>
+<nav aria-label="引出子查询的谓词" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#anyall">
+    带有ANY或ALL谓词的子查询
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#exists">
+    带有EXISTS谓词的子查询
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#select">
+    SELECT语句的一般格式
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    插入数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    修改数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    删除数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    视图
+  </a>
+<nav aria-label="视图" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    视图的定义
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    建立视图
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    视图上的操作
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_21">
+    更新
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_22">
+    更新视图的限制
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_23">
+    视图的优点
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_4">
+    SQL的数据控制
+  </a>
+<nav aria-label="SQL的数据控制" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_24">
+    授权
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_25">
+    权限回收
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_5">
+    嵌入式SQL
+  </a>
+<nav aria-label="嵌入式SQL" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sql_6">
+    将SQL语句嵌入到宿主语言中必须解决的问题
+  </a>
+<nav aria-label="将SQL语句嵌入到宿主语言中必须解决的问题" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_26">
+    数据库和主语言程序间的数据交换
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_27">
+    需要协调面向集合和面向记录两种不同的处理方式
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/donglinkang2021/DatabaseReview/edit/main/docs/课本复习/04SQL/snippet.md" title="编辑此页">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="sql">四、SQL</h1>
+<div class="toc">
+<ul>
+<li><a href="#sql">四、SQL</a><ul>
+<li><a href="#sql_1">SQL简介</a><ul>
+<li><a href="#sql_2">SQL的特点</a></li>
+</ul>
+</li>
+<li><a href="#sql_3">SQL的系统结构</a></li>
+<li><a href="#_1">数据定义</a><ul>
+<li><a href="#_2">建立索引</a><ul>
+<li><a href="#_3">索引选择</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_4">查询</a><ul>
+<li><a href="#_5">单表查询</a></li>
+<li><a href="#_6">空值</a></li>
+<li><a href="#_7">使用集函数</a></li>
+<li><a href="#_8">对查询结果分组</a></li>
+<li><a href="#outer-join">外连接（Outer Join）</a></li>
+<li><a href="#_9">嵌套查询概述</a></li>
+<li><a href="#_10">嵌套查询分类及求解方法</a><ul>
+<li><a href="#_11">不相关子查询</a></li>
+<li><a href="#_12">相关子查询</a></li>
+</ul>
+</li>
+<li><a href="#_13">引出子查询的谓词</a><ul>
+<li><a href="#anyall">带有ANY或ALL谓词的子查询</a></li>
+<li><a href="#exists">带有EXISTS谓词的子查询</a></li>
+</ul>
+</li>
+<li><a href="#select">SELECT语句的一般格式</a></li>
+</ul>
+</li>
+<li><a href="#_14">插入数据</a></li>
+<li><a href="#_15">修改数据</a></li>
+<li><a href="#_16">删除数据</a></li>
+<li><a href="#_17">视图</a><ul>
+<li><a href="#_18">视图的定义</a></li>
+<li><a href="#_19">建立视图</a></li>
+<li><a href="#_20">视图上的操作</a></li>
+<li><a href="#_21">更新</a></li>
+<li><a href="#_22">更新视图的限制</a></li>
+<li><a href="#_23">视图的优点</a></li>
+</ul>
+</li>
+<li><a href="#sql_4">SQL的数据控制</a><ul>
+<li><a href="#_24">授权</a></li>
+<li><a href="#_25">权限回收</a></li>
+<li><a href="#sql_5">嵌入式SQL</a><ul>
+<li><a href="#sql_6">将SQL语句嵌入到宿主语言中必须解决的问题</a><ul>
+<li><a href="#_26">数据库和主语言程序间的数据交换</a></li>
+<li><a href="#_27">需要协调面向集合和面向记录两种不同的处理方式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="sql_1">SQL简介</h2>
+<ul>
+<li>结构化查询语言SQL（Structured Query Language）是一种介于关系代数与关系演算之间的语言，是一个通用的、功能极强的关系数据库语言，是关系数据库的标准语言。</li>
+<li>SQL语言的版本包括：</li>
+<li>SQL-89，SQL-92，</li>
+<li>SQL-99(SQL3) 增加了面向对象的概念</li>
+<li>SQL2003(SQL4),</li>
+<li>SQL语言集==数据查询、数据操纵、数据定义和数据控制==功能于一体，充分体现了关系数据语言的特点和优点</li>
+</ul>
+<blockquote>
+<p>回顾起第一章中所写的是数据定义，数据组织、存储和管理，数据操纵这些功能而已</p>
+</blockquote>
+<h3 id="sql_2">SQL的特点</h3>
+<ul>
+<li>综合统一</li>
+<li>集==数据定义语言DDL、数据操纵语言DML、数据控制语言DCL==的功能于一体，可以完成数据库生命周期中的全部活动。</li>
+<li>关系模型中实体和实体间的联系都用关系来表示，使得操作符单一，每种操作只使用一个操作符。</li>
+<li>高度非过程化</li>
+<li>使用SQL语言，只需要提出“做什么”，而无需指明“怎么做”，无需了解存取路径，提高了数据的独立性</li>
+<li>面向集合的操作方式</li>
+<li>SQL语言采用集合操作方式，查询、插入、删除、修改操作的对象都是集合。</li>
+</ul>
+<h2 id="sql_3">SQL的系统结构</h2>
+<ul>
+<li>SQL语言支持数据库的三级模式结构 </li>
+<li>在SQL中，关系模式称为基本表(Base Table)，基本表的集合形成数据库模式，对应三级结构中的模式</li>
+<li>基本表在物理上与存储文件相对应，所有存储文件的集合为物理数据库。</li>
+<li>外模式由视图(View) 组成（也包含了部分基本表）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">SQL的系统结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614213423360" src="../snippet.assets/image-20230614213423360.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">数据定义</h2>
+<ul>
+<li>SQL的数据定义功能主要包括定义表、定义视图和定义索引，在SQL2中还增加了对SQL数据库模式的定义 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">SQL的数据定义语句</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="" src="../snippet.assets/image-20230614213746866.png"/></td>
+</tr>
+<tr>
+<td align="center">此处的模式为命名空间，和之前提到的模式不同</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">建立索引</h3>
+<ul>
+<li>语句格式</li>
+</ul>
+<pre><code class="language-sql">CREATE [UNIQUE] [CLUSTER] INDEX &lt;索引名&gt;     
+     ON &lt;表名&gt; (&lt;列名&gt;[&lt;次序&gt;][,&lt;列名&gt;[&lt;次序&gt;]]…)
+</code></pre>
+<ul>
+<li>&lt;表名&gt;指定要建索引的基本表名字</li>
+<li>索引可以建立在该表的一列或多列上，各列名之间用逗号分隔</li>
+<li>&lt;次序&gt;指定索引值的排列次序，升序ASC，降序DESC。缺省值：ASC</li>
+<li>UNIQUE表明此索引的每一个索引值只对应唯一的数据记录</li>
+<li>CLUSTER表示要建立的索引是聚簇索引</li>
+</ul>
+<h4 id="_3">索引选择</h4>
+<ul>
+<li>索引的选择是数据库设计中==最困难==的部分之一，需要估计对数据库上使用什么样的查询组合以及其他操作</li>
+<li>如果某个关系的==查询操作==比对它的==更新操作==多，那么建立在该关系上的索引具有较高的效率</li>
+<li>对于经常和查询where子句中的常量作比较的属性，以及频繁出现在连接条件中的属性应该建立索引</li>
+<li>更新操作频繁，创建索引要谨慎。需要仔细估算更新和查询数量的相对比例来决定索引的使用</li>
+<li>索引是内部技术实现，属于内模式的范畴</li>
+</ul>
+<h2 id="_4">查询</h2>
+<ul>
+<li>语句格式</li>
+</ul>
+<pre><code class="language-sql">SELECT [ALL|DISTINCT] &lt;目标列表达式&gt; [，&lt;目标列表达式&gt;] …
+FROM &lt;表名或视图名&gt;[， &lt;表名或视图名&gt; ] …
+[ WHERE &lt;条件表达式&gt; ]
+[ GROUP BY &lt;列名1&gt; [ HAVING &lt;条件表达式&gt; ] ]
+[ ORDER BY &lt;列名2&gt; [ ASC|DESC ] ]
+</code></pre>
+<ul>
+<li>SELECT子句：指定要显示的属性列</li>
+<li>FROM子句：指定查询对象(基本表或视图)</li>
+<li>WHERE子句：指定查询条件</li>
+<li>GROUP BY子句：对查询结果按指定列的值分组，该属性列值相等的元组为一个组。通常会在每组中作用集函数。</li>
+<li>HAVING短语：筛选出只有满足指定条件的组</li>
+<li>ORDER BY子句：对查询结果表按指定列值的升序或降序排序 </li>
+</ul>
+<h3 id="_5">单表查询</h3>
+<table>
+<thead>
+<tr>
+<th>WHERE子句常用的查询条件</th>
+<th>具体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>比较表达式</td>
+<td>&lt;列名1&gt; 比较算符 &lt;列名2（或常量）&gt;比较算符：=、&gt;、&gt;=、&lt;、&lt;=、&lt;&gt;（或!=）</td>
+</tr>
+<tr>
+<td>逻辑表达式</td>
+<td>&lt;条件表达式1&gt; 逻辑算符 &lt;条件表达式2&gt;逻辑算符：AND、OR、NOT</td>
+</tr>
+<tr>
+<td>BETWEEN</td>
+<td>&lt;列名1&gt; （NOT）BETWEEN &lt;常量1或列名2&gt; AND &lt;常量2或列名3&gt;</td>
+</tr>
+<tr>
+<td>IN</td>
+<td>&lt;列名&gt;（NOT）IN （常量表列 或 SELECT语句）</td>
+</tr>
+<tr>
+<td>LIKE</td>
+<td>&lt;列名&gt;（NOT）LIKE ‘匹配字符串’匹配符：“_”表示匹配一个字符，“%”表示匹配任意字符串</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>&lt;列名&gt; IS（NOT） NULL</td>
+</tr>
+<tr>
+<td>EXISTS</td>
+<td>（NOT）EXISTS （SELECT语句）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">空值</h3>
+<ul>
+<li>SQL允许属性有一个特殊值NULL称作空值。</li>
+<li>未知值：有值但是不知道是什么，例如未知生日</li>
+<li>不适用的值：例如配偶的名字</li>
+<li>保留的值：无权知道的值，例未公布的电话号码</li>
+<li>空值的运算</li>
+<li>空值不同于空白或零值。==没有两个相等的空值==。==空值和任何值进行算术运算，结果仍为空值==。</li>
+<li>执行计算时消除空值很重要，因为包含空值列的某些计算（如平均值）会不准确。 </li>
+<li>当使用逻辑运算符和比较运算符，有可能返回 结果 UNKNOWN， 是与TRUE 和 FALSE 相同的布尔值</li>
+<li>空串指的是零长度字符串</li>
+<li>当 m 为0或负数时，RIGHT('123', m) 返回空字符串RTRIM('     ') 返回空字符串。</li>
+</ul>
+<h3 id="_7">使用集函数</h3>
+<ul>
+<li>主要集函数</li>
+<li>计数<ul>
+<li>COUNT（[DISTINCT|ALL] *）</li>
+<li>COUNT（[DISTINCT|ALL] &lt;列名&gt;）</li>
+</ul>
+</li>
+<li>计算总和       SUM（[DISTINCT|ALL] &lt;列名&gt;）</li>
+<li>计算平均值  AVG（[DISTINCT|ALL] &lt;列名&gt;）</li>
+<li>求最大值      MAX（[DISTINCT|ALL] &lt;列名&gt;）</li>
+<li>求最小值      MIN（[DISTINCT|ALL] &lt;列名&gt;）  </li>
+<li>DISTINCT短语：在计算时要取消指定列中的重复值</li>
+<li>ALL短语：不取消重复值;  ==ALL为缺省值==</li>
+</ul>
+<h3 id="_8">对查询结果分组</h3>
+<ul>
+<li>使用GROUP BY子句分组    </li>
+<li>==细化集函数的作用对象==</li>
+<li>未对查询结果分组，集函数将作用于整个查询结果</li>
+<li>对查询结果分组后，集函数将分别作用于每个组 </li>
+<li>分组方法:按指定的一列或多列值分组,值相等的为一组</li>
+<li>使用GROUP BY子句后，==SELECT子句的列名列表中只能出现分组属性和集函数==</li>
+</ul>
+<p>[例1]  求各个课程号及相应的选课人数。</p>
+<pre><code class="language-sql">SELECT Cno, COUNT(Sno)     
+FROM SC
+GROUP BY Cno；
+</code></pre>
+<p>[例2]  </p>
+<table>
+<thead>
+<tr>
+<th align="center"><img alt="image-20230614215625191" src="../snippet.assets/image-20230614215625191.png"/></th>
+<th align="center"><img alt="image-20230614215632391" src="../snippet.assets/image-20230614215632391.png"/></th>
+<th align="center"><img alt="image-20230614215638304" src="../snippet.assets/image-20230614215638304.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614215157500" src="../snippet.assets/image-20230614215157500.png"/></td>
+<td align="center"><img alt="image-20230614215210726" src="../snippet.assets/image-20230614215210726.png"/></td>
+<td align="center"><img alt="image-20230614215220947" src="../snippet.assets/image-20230614215220947.png"/></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>GROUP BY子句的作用对象是==查询的中间结果表==</li>
+<li>使用HAVING短语筛选最终输出结果</li>
+<li>只有满足HAVING短语指定条件的组才输出</li>
+</ul>
+<p>[例1]  查询选修了3门以上课程的学生学号。</p>
+<pre><code class="language-sql">SELECT Sno
+FROM  SC
+GROUP BY Sno
+HAVING  COUNT(*) &gt;3
+</code></pre>
+<p>[例2]</p>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230614220035842" src="../snippet.assets/image-20230614220035842.png"/></th>
+<th><img alt="image-20230614220040604" src="../snippet.assets/image-20230614220040604.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="image-20230614220023500" src="../snippet.assets/image-20230614220023500.png"/></td>
+<td><img alt="image-20230614220029229" src="../snippet.assets/image-20230614220029229.png"/></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>HAVING短语与WHERE子句的区别</li>
+<li>作用对象不同<ul>
+<li>WHERE子句作用于==基表或视图==，从中选择满足条件的元组。</li>
+<li>HAVING短语作用于==组==，从中选择满足条件的组 (group)</li>
+</ul>
+</li>
+<li>==WHERE子句中不能使用集函数==；（集函数）</li>
+<li>HAVING短语中可以使用集函数（集函数）</li>
+</ul>
+<h3 id="outer-join">外连接（Outer Join）</h3>
+<ul>
+<li>外连接与普通连接的区别</li>
+<li>普通连接操作只输出满足连接条件的元组</li>
+<li>外连接操作以指定表为连接主体，==将主体表中不满足连接条件的元组一并输出==</li>
+<li>外连接</li>
+<li>在表名后面加外连接操作符指定非主体表</li>
+<li>非主体表有一“万能”的虚行,该行全部由空值组成</li>
+<li>虚行可以和主体表中所有不满足连接条件的元组进行连接</li>
+<li>由于虚行各列全部是空值，因此与虚行连接的结果中，来自非主体表的属性值全部是空值 </li>
+<li>左外连接列出左边关系中所有的元组</li>
+<li>右外连接列出右边关系中所有的元组</li>
+</ul>
+<h3 id="_9">嵌套查询概述</h3>
+<ul>
+<li>一个<code>SELECT-FROM-WHERE</code>语句称为一个查询块</li>
+<li>将一个查询块嵌套在另一个查询块的WHERE子句或HAVING短语的条件中的查询称为嵌套查询</li>
+</ul>
+<pre><code class="language-sql">SELECT Sname     
+FROM Student    -- 外层查询/父查询
+WHERE Sno IN
+(SELECT Sno FROM SC -- 内层查询/子查询
+WHERE Cno= ' 2 ') 
+</code></pre>
+<ul>
+<li>==子查询的限制：不能使用ORDER BY子句==</li>
+<li>层层嵌套方式反映了 SQL语言的结构化</li>
+<li>有些嵌套查询可以用连接运算替代</li>
+<li>嵌套查询的实现一般是从里到外，即先进行子查询，再把其结果用于父查询作为条件</li>
+</ul>
+<h3 id="_10">嵌套查询分类及求解方法</h3>
+<h4 id="_11">不相关子查询</h4>
+<ul>
+<li>子查询的查询条件不依赖于父查询</li>
+<li>是==由里向外==逐层处理。即每个子查询在上一级查询处理之前求解，子查询的结果用于建立其父查询的查找条件。</li>
+</ul>
+<h4 id="_12">相关子查询</h4>
+<ul>
+<li>子查询的查询条件依赖于父查询</li>
+<li>首先取外层查询中表的第一个元组，根据它与内层查询相关的属性值处理内层查询，若WHERE子句返回值为真，则取此元组放入结果表；</li>
+<li>然后再取外层表的下一个元组；</li>
+<li>重复这一过程，直至外层表全部检查完为止</li>
+</ul>
+<h3 id="_13">引出子查询的谓词</h3>
+<ul>
+<li>带有IN谓词的子查询</li>
+<li>带有比较运算符的子查询</li>
+<li>带有ANY或ALL谓词的子查询</li>
+<li>带有EXISTS谓词的子查询</li>
+</ul>
+<h4 id="anyall">带有ANY或ALL谓词的子查询</h4>
+<ul>
+<li>ANY和ALL谓词有时可以用集函数实现</li>
+<li>ANY与ALL与集函数的对应关系</li>
+</ul>
+<p><img alt="image-20230614221008075" src="../snippet.assets/image-20230614221008075.png"/></p>
+<ul>
+<li>用集函数实现子查询通常比直接用ANY或ALL查询效率要高，因为==前者通常能够减少比较次数==</li>
+</ul>
+<h4 id="exists">带有EXISTS谓词的子查询</h4>
+<ol>
+<li>EXISTS谓词</li>
+<li>NOT EXISTS谓词</li>
+<li>不同形式的查询间的替换</li>
+<li>用EXISTS/NOT EXISTS实现全称量词</li>
+<li>用EXISTS/NOT EXISTS实现逻辑蕴函</li>
+</ol>
+<h3 id="select">SELECT语句的一般格式</h3>
+<pre><code class="language-sql">SELECT [ALL|DISTINCT]  
+    &lt;目标列表达式&gt; [别名] [ ，&lt;目标列表达式&gt; [别名]] …
+     FROM     &lt;表名或视图名&gt; [别名] 
+              [ ，&lt;表名或视图名&gt; [别名]] …
+      [WHERE &lt;条件表达式&gt;]
+          [GROUP BY &lt;列名1&gt;[，&lt;列名1’&gt;] ...
+          [HAVING     &lt;条件表达式&gt;]]
+          [ORDER BY &lt;列名2&gt; [ASC|DESC] 
+                   [，&lt;列名2’&gt; [ASC|DESC] ] …  ]
+</code></pre>
+<h2 id="_14">插入数据</h2>
+<ul>
+<li>两种插入数据方式</li>
+<li>插入单个元组</li>
+<li>
+<p>插入子查询结果</p>
+</li>
+<li>
+<p>插入单个元组语句格式</p>
+</li>
+</ul>
+<pre><code class="language-sql">INSERT   INTO &lt;表名&gt; [(&lt;属性列1&gt;[,&lt;属性列2 &gt;…)]
+VALUES (&lt;常量1&gt; [，&lt;常量2&gt;] … )
+</code></pre>
+<ul>
+<li>功能:将新元组插入指定表中。</li>
+</ul>
+<h2 id="_15">修改数据</h2>
+<ul>
+<li>语句格式</li>
+</ul>
+<pre><code class="language-sql">UPDATE &lt;表名&gt; 
+  SET 列名1=&lt;表达式1&gt;[,列名2=&lt;表达式2&gt;]
+    [WHERE &lt;条件表达式&gt;]
+</code></pre>
+<ul>
+<li>功能：修改指定表中满足WHERE子句条件的元组</li>
+<li>说明</li>
+<li>SET子句：==指定修改方式==<ul>
+<li>要修改的列</li>
+<li>修改后取值</li>
+</ul>
+</li>
+<li>WHERE子句：指定要修改的元组<ul>
+<li>缺省表示要修改表中的所有元组</li>
+</ul>
+</li>
+</ul>
+<h2 id="_16">删除数据</h2>
+<ul>
+<li>语句格式</li>
+</ul>
+<pre><code class="language-sql">DELETE  FROM  &lt;表名&gt;
+[WHERE &lt;条件&gt;]
+</code></pre>
+<ul>
+<li>功能</li>
+<li>
+<p>删除指定表中满足WHERE子句条件的元组</p>
+</li>
+<li>
+<p>WHERE子句</p>
+</li>
+<li>指定要删除的元组</li>
+<li>缺省表示要修改表中的所有元组</li>
+</ul>
+<h2 id="_17">视图</h2>
+<ul>
+<li>视图的特点</li>
+<li>==虚表==,是从一个或几个基本表（或视图）导出的表</li>
+<li>只存放视图的定义，不会出现数据冗余</li>
+<li>基表中的数据发生变化,从视图中查询出的数据也改变</li>
+</ul>
+<blockquote>
+<p>判断题考过：视图只能建立在基表上❌，而实际上也可以建立在视图上</p>
+</blockquote>
+<ul>
+<li>基于视图的操作</li>
+<li>视图实际上提供了一种观察数据的逻辑窗口。对视图的操作意味着对基表进行相对应的操作。但对视图的更新(插入数据、删除、修改)有一些限制</li>
+<li>视图的定义是递归的，可以定义基于该视图的新视图</li>
+</ul>
+<h3 id="_18">视图的定义</h3>
+<h3 id="_19">建立视图</h3>
+<pre><code class="language-sql">CREATE  VIEW &lt;视图名&gt;  [(&lt;列名&gt; [,&lt;列名&gt;]…)]
+AS  &lt;子查询&gt;
+[WITH  CHECK  OPTION]
+</code></pre>
+<ul>
+<li>SELECT语句表示子查询，但通常不允许包括ORDER BY子句和DISTINCT短语</li>
+<li>WITH CHECK OPTION</li>
+<li>通过视图进行增删改操作时，不得破坏视图定义中的谓词条件（即子查询中的条件表达式）</li>
+<li>
+<p>DBMS执行CREATE VIEW语句时只是把视图的定义存入数据字典，并不执行其中的SELECT语句。在对视图查询时，==按视图的定义从基本表中将数据查出==</p>
+</li>
+<li>
+<p>组成视图的属性列名==全部省略==或==全部指定==</p>
+</li>
+<li>省略: </li>
+<li>由子查询中SELECT目标列中的诸字段组成</li>
+<li>在下列情况下，必须命名 CREATE VIEW 中的列：</li>
+<li>当列是从算术表达式、函数或常量派生的</li>
+<li>两个或更多的列可能会具有相同的名称（通常是因为连接）</li>
+<li>
+<p>视图中的某列被赋予了不同于派生来源列的名称</p>
+</li>
+<li>
+<p>WITH CHECK OPTIOWN选项</p>
+</li>
+<li>通过视图插入、删除或修改元组时检查元组是否满足视图定义中的条件，如果不满足则拒绝执行</li>
+<li>如果视图定义中含有条件，建议选择WITH CHECK OPTION选项，以约束更新的数据 </li>
+</ul>
+<p>【例4-41】建立年龄小于23岁的学生视图，并要求数据更新时进行检查。</p>
+<pre><code class="language-sql">CREATE VIEW Sage_23
+AS SELECT * 
+FROM Student 
+WHERE Sage &lt; 23 
+WITH CHECK OPTION 
+</code></pre>
+<ul>
+<li>当通过视图更新学生元组时，系统将检查所更新的学生年龄是否小于23岁，不满足条件时系统将拒绝执行更新操作 </li>
+</ul>
+<h3 id="_20">视图上的操作</h3>
+<ul>
+<li>从用户角度：与基本表一样，通过视图可以对数据库执行查询和更新操作</li>
+<li>DBMS实现视图查询的方法</li>
+<li>实体化视图（View Materialization）</li>
+<li>有效性检查：检查所查询的视图是否存在</li>
+<li>执行视图定义，将视图临时实体化，生成临时表</li>
+<li>查询视图转换为查询临时表</li>
+<li>
+<p>查询完毕删除被实体化的视图(临时表)</p>
+</li>
+<li>
+<p>视图消解法（View Resolution）</p>
+</li>
+<li>进行有效性检查，检查查询的表、视图等是否存在。如果存在，则从数据字典中取出视图的定义</li>
+<li>把视图定义中的子查询与用户的查询结合起来，转换成等价的对基本表的查询</li>
+<li>执行修正后的查询</li>
+</ul>
+<h3 id="_21">更新</h3>
+<ul>
+<li>对视图的数据插入、删除、修改最终转换为对基表的操作来进行</li>
+<li>用户角度：更新视图与更新基本表相同</li>
+<li>DBMS实现视图更新的方法<ul>
+<li>视图实体化法（View Materialization）</li>
+<li>视图消解法（View Resolution）</li>
+</ul>
+</li>
+<li>指定WITH CHECK OPTION子句后</li>
+<li>DBMS在更新视图时会进行检查，防止用户通过视图对==不属于视图范围内==的基本表数据进行更新</li>
+</ul>
+<p>【例4-48】通过视图Sage_23插入学生刘敏的信息（'20041' ,'刘敏' ,21,'女','数学'）。 </p>
+<pre><code class="language-sql">CREATE VIEW Sage_23
+AS SELECT * FROM Student 
+WHERE Sage &lt; 23 
+WITH CHECK OPTION;
+
+INSERT INTO Sage_23 
+VALUES ('20041' ,'刘敏' ,21,'女','数学')
+
+-- 以上插入将转换成如下语句执行： 
+INSERT INTO Student
+       VALUES ('20041' ,'刘敏' ,21,'女','数学')
+</code></pre>
+<p>【例4-50】通过视图Sage_23删除学生王茵的记录。 </p>
+<pre><code class="language-sql">CREATE VIEW Sage_23
+AS SELECT * FROM Student
+WHERE Sage &lt; 23 
+WITH CHECK OPTION;
+
+DELETE FROM Sage_23   WHERE Sname='王茵'
+-- 该删除语句将转换为对基本表的操作：
+DELETE FROM Student   
+WHERE Sname='王茵' AND Sage &lt; 23
+</code></pre>
+<h3 id="_22">更新视图的限制</h3>
+<p>一些视图是不可更新的，因为对这些视图的更新不能唯一地有意义地转换成对相应基本表的更新(对两类方法均如此)
+【例4-49】通过视图D-Sage插入计算机系学生的平均年龄（'计算机'，21） </p>
+<pre><code class="language-sql">CREATE VIEW D-Sage (Sdept, Avgage)
+AS SELECT Sdept, AVG(Sage)
+FROM Student 
+GROUP BY Sdept；
+</code></pre>
+<pre><code class="language-sql">-- 无论实体化法还是消解法都无法将其转换成对基本表的更新，视图D-Sage为不可更新视图
+INSERT INTO D-Sage 
+VALUES ('计算机',21)
+</code></pre>
+<p>【例4-51】通过视图CS_SC删除学生刘明亮的信息。 </p>
+<pre><code class="language-sql">CREATE VIEW CS_SC(Sno, Sname, Grade)
+AS SELECT Student.Sno, Sname, Grade 
+FROM Student, SC
+WHERE Sdept='计算机' AND Student.Sno=SC.Sno AND SC.Cno=‘C2’
+</code></pre>
+<pre><code class="language-sql">-- 不知是删除学生刘明亮的信息还是该学生的选课信息。删除操作涉及二个表，是不能执行的
+DELETE FROM CS_SC
+WHERE Sname='刘明亮'
+</code></pre>
+<h3 id="_23">视图的优点</h3>
+<ol>
+<li>视图提供了数据的逻辑独立性 </li>
+<li>视图在一定程度上(只能在一定程度上)保证了数据的逻辑独立性<ul>
+<li>由于视图更新是有条件的，因此应用程序中修改数据的语句可能仍会因基本表结构的改变而改变</li>
+</ul>
+</li>
+<li>简化了用户视图</li>
+<li>定义视图能够简化用户的操作,适当的利用视图可以更清晰的表达查询<ul>
+<li>基于多张表连接形成的视图</li>
+<li>基于复杂嵌套查询的视图</li>
+<li>含导出属性的视图</li>
+</ul>
+</li>
+<li>视图使用户以不同角度看待相同的数 </li>
+<li>视图机制能使不同用户以不同方式看待同一数据，适应数据库共享的需要</li>
+<li>视图提供了安全保护功能 </li>
+<li>对不同用户定义不同视图，使每个用户只能看到他有权看到的数据</li>
+<li>通过WITH CHECK OPTION对关键数据定义操作时间限制</li>
+</ol>
+<h2 id="sql_4">SQL的数据控制</h2>
+<ul>
+<li>SQL的数据控制功能包括</li>
+<li>数据的安全性 ——第6章</li>
+<li>数据的完整性 ——第7章</li>
+<li>数据恢复         ——第8章</li>
+<li>并发控制         ——第9章</li>
+<li>本章介绍安全性中对数据的存取权限控制语句 </li>
+<li>SQL中，权限通常是指使用SQL语句存取数据的权力， SQL提供了一套灵活的授权机制，哪些用户拥有对哪些数据的操作权限可以通过授权获得。 <ul>
+<li>授权语句GRANT</li>
+<li>回收语句REVOKE </li>
+</ul>
+</li>
+</ul>
+<h3 id="_24">授权</h3>
+<ul>
+<li>授权是指有授予权的用户将自己所拥有的权限授予其他用户 </li>
+<li>授权语句格式为：</li>
+</ul>
+<pre><code class="language-sql">GRANT {&lt;权限1&gt;, &lt;权限2&gt;, …}
+ON TABLE &lt;表名或视图名&gt;
+TO {&lt;用户名1&gt;,&lt;用户名2&gt;, … | PUBLIC}
+[WITH GRANT OPTION]
+</code></pre>
+<ul>
+<li>当有WITH GRANT OPTION短语时，被授权的用户还可以把获得的权限再授予其它用户 </li>
+<li>一个GRANT语句可以把相应权限同时授予多个用户,用户名表如用短语PUBLIC代替，则表示把权限授予所有数据库的用户 </li>
+</ul>
+<h3 id="_25">权限回收</h3>
+<ul>
+<li>具有授予权的用户可以通过回收语句将所授予的权限回收。</li>
+<li>回收语句格式为：</li>
+</ul>
+<pre><code class="language-sql">REVOKE {&lt;权限1&gt;, &lt;权限2&gt;, …} 
+ON TABLE &lt;表名或视图名&gt;
+FROM {&lt;用户名1&gt;,&lt;用户名2&gt;, … | PUBLIC}
+[RESTRICT|CASCADE]
+</code></pre>
+<ul>
+<li>CASCADE选项表示回收权限时要引起级联操作，即拥有授予权（WITH GRANT OPTION）的用户如果把拥有的权限授予了其他用户，则要把转授出去的权限一起回收。</li>
+<li>RESTRICT选项表示，只有用户没有将拥有的权限转授给其他用户时才能回收该用户的权限，否则系统将拒绝执行。</li>
+</ul>
+<h3 id="sql_5">嵌入式SQL</h3>
+<ul>
+<li>SQL语言提供了两种使用方式：交互式、嵌入式</li>
+<li>为什么要引入嵌入式SQL：</li>
+<li>SQL语言是非过程性语言,事务处理应用需要高级语言</li>
+<li>SQL是面向集合的，是非过程性的。而许多事务处理是过程性的，与上下文相关的，单纯使用SQL语句难以实现各种应用的全部功能。</li>
+<li>为解决这一问题，SQL语言提供了嵌入式使用方式，</li>
+<li>将SQL语言嵌入到高级语言中，利用高级语言的结构性来弥补SQL语言实现复杂应用方面的不足，称为嵌入式SQL(Embedded SQL)，而嵌入SQL的高级语言称为主语言或宿主语言。</li>
+</ul>
+<h4 id="sql_6">将SQL语句嵌入到宿主语言中必须解决的问题</h4>
+<ol>
+<li>编译嵌入主语言的SQL语句成为==可执行代码==</li>
+<li>数据库和主语言程序间的==通信==</li>
+<li>数据库和主语言程序间的==数据交换==</li>
+<li>需要协调==面向集合==和==面向记录==两种不同的处理方式 </li>
+</ol>
+<h5 id="_26">数据库和主语言程序间的数据交换</h5>
+<ul>
+<li>嵌入式SQL语句有输入变量和输出变量，用来与主语言进行数据交换。</li>
+<li>这些变量是主语言定义的程序变量，简称主变量(host variable)或宿主变量</li>
+<li>输入主变量</li>
+<li>指定向数据库中插入的数据； 将数据库中的数据修改为指定值； 指定执行的操作</li>
+<li>指定WHERE子句或HAVING子句中的条件</li>
+<li>输出主变量</li>
+<li>获取SQL语句的结果数据和SQL语句的执行状态</li>
+</ul>
+<h5 id="_27">需要协调面向集合和面向记录两种不同的处理方式</h5>
+<ul>
+<li>集合性操作语言与过程性操作语言的不匹配</li>
+<li>==SQL语言是面向集合的==，一条SQL语句原则上可以产生或处理==多条==记录</li>
+<li>==主语言是面向记录的==，一组主变量一次只能存放==一条==记录</li>
+<li>仅使用主变量并不能完全满足SQL语句向应用程序输出数据的要求</li>
+<li>嵌入式SQL引入了==游标==的概念，用来协调这两种不同的处理方式</li>
+<li>游标是系统为用户开设的一个==数据缓冲区==，存放SQL语句的执行结果</li>
+<li>每个游标区都有一个名字，游标是可移动的。</li>
+</ul>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            回到页面顶部
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: Review" class="md-footer__link md-footer__link--prev" href="../review/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                上一页
+              </span>
+              Review
+            </div>
+</div>
+</a>
+<a aria-label="下一页: 速记" class="md-footer__link md-footer__link--next" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/review/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                下一页
+              </span>
+              速记
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2022 linkdom
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/donglinkang2021" rel="noopener" target="_blank" title="Github | linkdom">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</a>
+<a class="md-social__link" href="https://space.bilibili.com/531177225" rel="noopener" target="_blank" title="Bilibili | 用心的小康同学">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"></path></svg>
+</a>
+<a class="md-social__link" href="https://www.cnblogs.com/linkdom/" rel="noopener" target="_blank" title="Cnblogs | linkdom">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "navigation.tracking", "navigation.index", "navigation.expand", "navigation.sections", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../../../assets/javascripts/bundle.39f04ddb.min.js"></script>
+<script src="../../../mkdocs/javascripts/mathjax.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

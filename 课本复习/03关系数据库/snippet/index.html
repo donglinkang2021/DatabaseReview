@@ -1,0 +1,1424 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="linkdom" name="author"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.5.2" name="generator"/>
+<title>三、关系数据库 - 数据库复习</title>
+<link href="../../../assets/stylesheets/main.9f9400aa.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../mkdocs/css/unordered-list-symbols.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="orange" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="数据库复习" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            数据库复习
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              三、关系数据库
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"></path></svg>
+</label>
+</form>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      README
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../DailyNote/">
+      DailyNote
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+      最后一套题总结
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        试题分析
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        课本复习
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="数据库复习" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    数据库复习
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        README
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../DailyNote/">
+        DailyNote
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+        最后一套题总结
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          试题分析
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="试题分析" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          试题分析
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        各个题型及对应知识点分析
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/1.%E5%A1%AB%E7%A9%BA%E9%A2%98/">
+        1.填空题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/2.%E5%88%A4%E6%96%AD%E9%A2%98/">
+        2.判断题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/3.%E5%8D%95%E9%A1%B9%E9%80%89%E6%8B%A9%E9%A2%98/">
+        3.单项选择题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/4.%E7%AE%80%E7%AD%94%E9%A2%98/">
+        4.简答题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/5.%E7%BB%BC%E5%90%88%E9%A2%98/">
+        5.综合题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/6.%E8%AE%BE%E8%AE%A1%E9%A2%98/">
+        6.设计题
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          课本复习
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="课本复习" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          课本复习
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_1" id="__nav_5_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_1">
+          01数据库系统引论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="01数据库系统引论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_1">
+<span class="md-nav__icon md-icon"></span>
+          01数据库系统引论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review_detail/">
+        一、数据库系统引论
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/snippet/">
+        一、数据库系统引论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_2" id="__nav_5_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_2">
+          02数据模型
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="02数据模型" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_2">
+<span class="md-nav__icon md-icon"></span>
+          02数据模型
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/snippet/">
+        二、数据模型
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" id="__nav_5_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_3">
+          03关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="03关系数据库" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_3">
+<span class="md-nav__icon md-icon"></span>
+          03关系数据库
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          三、关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        三、关系数据库
+      </a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    关系的定义
+  </a>
+<nav aria-label="关系的定义" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#domain">
+    域(Domain)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cartesian-product">
+    笛卡尔积(Cartesian Product)
+  </a>
+<nav aria-label="笛卡尔积(Cartesian Product)" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cartesian-product_1">
+    笛卡尔积(Cartesian Product)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tuple">
+    元组(Tuple)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#component">
+    分量(Component)
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    关系
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    关系模式和关系数据库
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    键
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    完整性约束
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    关系代数
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    专门的关系运算
+  </a>
+<nav aria-label="专门的关系运算" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#selection">
+    选择（Selection）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#projection">
+    投影（Projection）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#join">
+    连接（Join）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#division">
+    除运算（Division）
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    扩充的关系运算
+  </a>
+<nav aria-label="扩充的关系运算" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    外连接
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    关系代数的一个例子
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_4" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4">
+          04SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="04SQL" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
+<span class="md-nav__icon md-icon"></span>
+          04SQL
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/snippet/">
+        四、SQL
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_5" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5">
+          05查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="05查询处理和查询优化" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
+<span class="md-nav__icon md-icon"></span>
+          05查询处理和查询优化
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/snippet/">
+        五、查询处理和查询优化
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_6" id="__nav_5_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_6">
+          06数据库的安全性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="06数据库的安全性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_6">
+<span class="md-nav__icon md-icon"></span>
+          06数据库的安全性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/snippet/">
+        六、数据库的安全性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_7" id="__nav_5_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_7">
+          07数据库的完整性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="07数据库的完整性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_7">
+<span class="md-nav__icon md-icon"></span>
+          07数据库的完整性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/snippet/">
+        七、数据库的完整性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_8" id="__nav_5_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_8">
+          08数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="08数据库恢复技术" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_8">
+<span class="md-nav__icon md-icon"></span>
+          08数据库恢复技术
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/snippet/">
+        八、数据库恢复技术
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_9" id="__nav_5_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_9">
+          09并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="09并发控制" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_9">
+<span class="md-nav__icon md-icon"></span>
+          09并发控制
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/snippet/">
+        九、并发控制
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_10" id="__nav_5_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_10">
+          10关系数据库设计理论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="10关系数据库设计理论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_10">
+<span class="md-nav__icon md-icon"></span>
+          10关系数据库设计理论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/snippet/">
+        十、关系数据库设计理论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_11" id="__nav_5_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_11">
+          11数据库设计
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="11数据库设计" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_11">
+<span class="md-nav__icon md-icon"></span>
+          11数据库设计
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/snippet/">
+        十一、数据库设计
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_12" id="__nav_5_12" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_12">
+          12数据库编程
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="12数据库编程" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_12">
+<span class="md-nav__icon md-icon"></span>
+          12数据库编程
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/snippet/">
+        十二、数据库编程
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    关系的定义
+  </a>
+<nav aria-label="关系的定义" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#domain">
+    域(Domain)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cartesian-product">
+    笛卡尔积(Cartesian Product)
+  </a>
+<nav aria-label="笛卡尔积(Cartesian Product)" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cartesian-product_1">
+    笛卡尔积(Cartesian Product)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tuple">
+    元组(Tuple)
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#component">
+    分量(Component)
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    关系
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    关系模式和关系数据库
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    键
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    完整性约束
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    关系代数
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    专门的关系运算
+  </a>
+<nav aria-label="专门的关系运算" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#selection">
+    选择（Selection）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#projection">
+    投影（Projection）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#join">
+    连接（Join）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#division">
+    除运算（Division）
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    扩充的关系运算
+  </a>
+<nav aria-label="扩充的关系运算" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    外连接
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    关系代数的一个例子
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/donglinkang2021/DatabaseReview/edit/main/docs/课本复习/03关系数据库/snippet.md" title="编辑此页">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="_1">三、关系数据库</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">三、关系数据库</a><ul>
+<li><a href="#_2">关系的定义</a><ul>
+<li><a href="#domain">域(Domain)</a></li>
+<li><a href="#cartesian-product">笛卡尔积(Cartesian Product)</a><ul>
+<li><a href="#cartesian-product_1">笛卡尔积(Cartesian Product)</a></li>
+<li><a href="#tuple">元组(Tuple)</a></li>
+<li><a href="#component">分量(Component)</a></li>
+</ul>
+</li>
+<li><a href="#_3">关系</a></li>
+</ul>
+</li>
+<li><a href="#_4">关系模式和关系数据库</a></li>
+<li><a href="#_5">键</a></li>
+<li><a href="#_6">完整性约束</a></li>
+<li><a href="#_7">关系代数</a></li>
+<li><a href="#_8">专门的关系运算</a><ul>
+<li><a href="#selection">选择（Selection）</a></li>
+<li><a href="#projection">投影（Projection）</a></li>
+<li><a href="#join">连接（Join）</a></li>
+<li><a href="#division">除运算（Division）</a></li>
+</ul>
+</li>
+<li><a href="#_9">扩充的关系运算</a><ul>
+<li><a href="#_10">外连接</a></li>
+</ul>
+</li>
+<li><a href="#_11">关系代数的一个例子</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2">关系的定义</h2>
+<p>在关系理论是以集合代数理论为基础的，因此，我们可以用集合代数给出二维表的“关系”定义。先引入==域==和==笛卡尔积==的概念。 </p>
+<h3 id="domain">域(Domain)</h3>
+<ul>
+<li>域是一组具有==相同数据类型==的值的集合</li>
+<li>自然数、整数、{男、女}、{0、1}</li>
+<li>关系中用域表示属性的取值范围，例如</li>
+<li>D1={李丽，王平，刘伟}</li>
+<li>D2={男，女}</li>
+<li>D3={47，28，30}</li>
+<li>其中D1，D2，D3为域名， 分别表示教师关系中姓名、性别、年龄的集合</li>
+</ul>
+<h3 id="cartesian-product">笛卡尔积(Cartesian Product)</h3>
+<h4 id="cartesian-product_1">笛卡尔积(Cartesian Product)</h4>
+<ul>
+<li>定义3.1 给定一组集合D1，D2，…，Dn，它们可以是相同的。 D1， D2， …， Dn的笛卡尔积为：</li>
+</ul>
+<div class="arithmatex">\[
+D_1×D_2×…×D_n=\{(d_1,d_2,…,d_n) | d_i \in D_i, i=1,2,…,n\}
+\]</div>
+<ul>
+<li>所有域的所有值的一个组合，不能重复</li>
+</ul>
+<h4 id="tuple">元组(Tuple)</h4>
+<ul>
+<li>笛卡尔积中每一个元素(d1，d2，…，dn)叫做一个n元组(n-tuple)或简称元组</li>
+<li>例(张清玫，计算机专业，李勇)、 (张清玫，计算机专业，刘晨)是元组</li>
+</ul>
+<h4 id="component">分量(Component)</h4>
+<ul>
+<li>笛卡尔积元素(d1，d2，…，dn)中的每一个值di叫做一个分量</li>
+<li>例张清玫，计算机专业，李勇，刘晨是分量</li>
+</ul>
+<h3 id="_3">关系</h3>
+<ul>
+<li>关系</li>
+<li>
+<p>定义3.2 D1×D2×…×Dn的任一个子集称为D1， D2， …， Dn上的一个关系。n叫做关系的目或度(degree)</p>
+</li>
+<li>
+<p>元组和属性</p>
+</li>
+<li>
+<p>关系中的每一行对应一个元组， 通常用t表示</p>
+</li>
+<li>
+<p>每一列对应一个域。关系中的列称为属性，每一列用属性名表示 。<span class="arithmatex">\(t[A_i]\)</span>表示元组t在属性Ai上的值 </p>
+</li>
+<li>
+<p>一元关系与二元关系</p>
+</li>
+<li>
+<p>当n=1时，称该关系为一元关系（Unary relation）</p>
+</li>
+<li>
+<p>当n=2时，称该关系为二元关系（Binary relation）</p>
+</li>
+<li>
+<p>按照定义，关系可以是一个无限集合</p>
+</li>
+<li>
+<p>由于笛卡尔积不满足交换律，所以</p>
+</li>
+</ul>
+<div class="arithmatex">\[
+(d_1,\ldots d_i,d_j,\ldots d_n)\neq(d_1,\ldots d_j,d_i,\ldots d_n)
+\]</div>
+<ul>
+<li>严格地说，==关系==是一种规范化了的==二维表==中行的集合，</li>
+<li>当关系作为关系代数数据模型的数据结构时，需要作出补充和限定。</li>
+<li>无限关系在数据库中是无意义的，因此限定关系代数数据模型中的关系必须是有限集合。</li>
+<li>通过为关系的每列==增加一个属性名==的方法取消元组的有序性，即</li>
+</ul>
+<div class="arithmatex">\[
+(d_1,\ldots d_i,d_j,\ldots d_n)=(d_1,\ldots d_j,d_i,\ldots d_n)\\i,j=1,2,\ldots,n
+\]</div>
+<h2 id="_4">关系模式和关系数据库</h2>
+<ul>
+<li>关系模式(Relation Schema)是对关系的描述，</li>
+<li>该描述包括关系名、属性名、属性的类型和长度，以及属性间固有的数据关联关系</li>
+<li>关系模式一般简记为关系名和属性名的集合<ul>
+<li><span class="arithmatex">\(R(A_1,A_2,\ldots,A_n)\)</span>，或仅用关系名R表示。</li>
+</ul>
+</li>
+<li>如图书关系模式可描述为：<ul>
+<li>图书(书号，书名，作者，单价，出版社)</li>
+</ul>
+</li>
+<li>关系的值是元组的集合，称为关系 </li>
+<li>关系是对现实世界中事物在某一时刻状态的反映，关系的值是随时间在不断变化的 </li>
+<li>==关系模式和关系统称为关系==，通过上下文加以区别</li>
+</ul>
+<h2 id="_5">键</h2>
+<ul>
+<li>为了区分不同元组，用其中一个或多个属性值标识，能够唯一标识元组的属性或属性组称为关系的键 </li>
+<li>关系中能够起标识作用的键称为==候选键==</li>
+<li>在一个关系中，如果有多个候选键，选其中的一个键作为==主键(primary key)== </li>
+<li>若关系的键由多个属性组成，称为联合键 </li>
+<li>关系的所有属性构成该关系的键，称为全键</li>
+<li>键（key）</li>
+<li>键是一个或多个属性组成的，能够唯一标识一个元组。 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">主键、候选键、超键的关系</th>
+<th align="center">具体例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230613162541078" src="../snippet.assets/image-20230613162541078.png"/></td>
+<td align="center"><img alt="image-20230613163208295" src="../snippet.assets/image-20230613163208295.png"/></td>
+</tr>
+</tbody>
+</table>
+<p>ref:link:<a href="https://www.geeksforgeeks.org/types-of-keys-in-relational-model-candidate-super-primary-alternate-and-foreign/">关系模型中的键类型（候选键、超级键、主键、备用键和外来键） - GeeksforGeeks</a></p>
+<h2 id="_6">完整性约束</h2>
+<ul>
+<li>
+<p>关系模型的完整性规则是对关系的某种约束条件</p>
+</li>
+<li>
+<p>为了维护数据库中数据与现实世界的一致性，对关系数据库的插入、删除和修改操作必须有一定的约束条件，这就是关系模型的三类完整性：</p>
+</li>
+<li>
+<p>实体完整性</p>
+<ul>
+<li>通常由关系系统自动支持</li>
+</ul>
+</li>
+<li>参照完整性<ul>
+<li>通常由关系系统自动支持</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>实体完整性和参照完整性是关系的两个不变性，应该由关系系统自动支持</p>
+</blockquote>
+<ul>
+<li>
+<p>用户定义的完整性</p>
+<ul>
+<li>反映应用领域需要遵循的约束条件，体现了具体领域中的语义约束</li>
+<li>用户定义后由系统支持</li>
+</ul>
+</li>
+<li>
+<p>实体完整性约束（Entity Integrity Constraint ）是指==主键的值不能为空或部分为空==</p>
+</li>
+<li>实体完整性规则<ul>
+<li>若属性(指一个或一组属性)A是基本关系R的==主属性==，则属性A==不能取空值==</li>
+</ul>
+</li>
+<li>
+<p>如果一个元组的键为空值，或部分为空，该元组将不可标识，不能表示任何实体，因而无意义</p>
+</li>
+<li>
+<p>参照完整性约束（Reference Integrity Constraint ）是对==关系中作为外键的值的约束==，规定：</p>
+</li>
+<li>如果关系R1中属性A是另一个关系R2中的主键，则对于关系R1中的任一个元组在属性A上的值或者为空值，或者为另一个关系R2中某个元组的主键的值</li>
+<li>设F是基本关系R的一个或一组属性，但不是关系R的键(码)。如果F与基本关系S的主键Ks相对应，则称F是基本关系R的==外码(外键)==</li>
+<li>基本关系R称为参照关系(Referencing Relation)，基本关系S称为被参照关系(Referenced Relation)或目标关系</li>
+<li>说明：关系R和S不一定是不同的关系</li>
+<li>S的主键<span class="arithmatex">\(K_s\)</span>和R的外键F必须定义在同一个或组域上</li>
+<li>
+<p>外键并不一定要与相应的主键同名。</p>
+</li>
+<li>
+<p>用关系来描述实体及实体间的联系，因此关系模型中存在着关系与关系间的引用</p>
+</li>
+<li>学生关系中每个元组的==“专业号”==只取下面两类值:</li>
+<li>==空值==，表示尚未给该学生分配专业</li>
+<li>==非空值==，该值必须==是专业关系中某个元组的“专业号”值==，表示该学生不可能分配到不存在的专业中</li>
+<li>即学生关系中的某个属性的取值需要参照专业关系中的属性取值</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>被参照关系（主表）</th>
+<th>参照关系（从表）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="image-20230613164721287" src="../snippet.assets/image-20230613164721287.png"/></td>
+<td><img alt="image-20230613164736789" src="../snippet.assets/image-20230613164736789.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">关系代数</h2>
+<ul>
+<li>关系代数</li>
+<li>
+<p>一种抽象的查询语言，用对关系的运算来表达查询</p>
+</li>
+<li>
+<p>关系代数运算的三个要素</p>
+</li>
+<li>
+<p>运算对象：关系</p>
+</li>
+<li>
+<p>运算结果：关系</p>
+</li>
+<li>
+<p>运算符</p>
+</li>
+<li>
+<p>按运算符的不同，关系代数运算的分类：</p>
+</li>
+<li>传统的集合运算<ul>
+<li>并、差、交、广义笛卡尔积</li>
+<li>把关系看成元组的集合，以元组作为集合中元素来进行运算，其运算是从关系的“水平”方向即行的角度进行的</li>
+</ul>
+</li>
+<li>专门的关系运算<ul>
+<li>选择、投影、连接、除</li>
+<li>不仅涉及行运算，也涉及列运算，这种运算是为数据库的应用而引进的特殊运算。</li>
+</ul>
+</li>
+</ul>
+<h2 id="_8">专门的关系运算</h2>
+<h3 id="selection">选择（Selection）</h3>
+<ul>
+<li>选择运算是关系上的一元运算，是从关系中选择满足一定条件的元组子集    </li>
+</ul>
+<div class="arithmatex">\[
+\sigma_F(R)=\{t|t\in R~\wedge~t(F)\}
+\]</div>
+<ul>
+<li>F是限定条件的布尔表达式，由逻辑算符<span class="arithmatex">\((\neg ,\vee ,\wedge )\)</span>连接比较表达式组成 </li>
+<li>上式表示在关系R中选择使t(F)为真的所有元组</li>
+<li>选择运算是从行的角度进行的运算</li>
+</ul>
+<h3 id="projection">投影（Projection）</h3>
+<ul>
+<li>在模式R上的投影运算表示为 </li>
+</ul>
+<div class="arithmatex">\[
+\Pi_x(R)=\{t[X]|t\in R\}
+\]</div>
+<ul>
+<li>其中，<span class="arithmatex">\(\Pi\)</span>是投影算符，X是模式R属性的子集，t[X]表示R中元组在属性集X上的值，或为元组t在X上的投影 </li>
+<li>从R中选择出若干属性列组成新的关系</li>
+<li>投影操作主要是从列的角度进行运算</li>
+<li>但投影之后不仅取消了原关系中的某些列，而且还可能取消某些元组（避免重复行）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">选择运算是从行的角度进行的运算</th>
+<th>投影操作主要是从列的角度进行运算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230613170259750" src="../snippet.assets/image-20230613170259750.png"/></td>
+<td><img alt="image-20230613170702919" src="../snippet.assets/image-20230613170702919.png"/></td>
+</tr>
+</tbody>
+</table>
+<h3 id="join">连接（Join）</h3>
+<ul>
+<li>连接运算是把二个关系中的元组按条件连接起来，形成一个新关系</li>
+<li>条件连接</li>
+<li>自然连接</li>
+<li>条件连接也称<span class="arithmatex">\(\theta\)</span>连接，是将二个关系中满足<span class="arithmatex">\(\theta\)</span>条件的元组拼接起来形成新元组的集合。 </li>
+<li>设属性A和B分别是关系R和S上的属性，且定义在同一个域上，R和S的连接记为： </li>
+</ul>
+<div class="arithmatex">\[
+\mathop{R\Join S}_{A~\theta ~B} = 
+\{
+t|\overset{\LARGE{\frown}}{t_r t_s},~
+t_r\in R \wedge  t_s\in S \wedge
+t_r[A] ~\theta ~ t_s[B]
+\}
+\]</div>
+<ul>
+<li>
+<p>其中，<span class="arithmatex">\(\Join\)</span>是连接符，<span class="arithmatex">\(A~\theta ~B\)</span>为连接条件。<span class="arithmatex">\(\theta\)</span>是比较符 </p>
+</li>
+<li>
+<p>条件连接</p>
+</li>
+<li>从R和S的笛卡尔积R×S中选取R关系在A属性组上的值与S关系在B属性组上值满足比较条件的元组</li>
+</ul>
+<div class="arithmatex">\[
+\mathop{R\Join S}_{A~\theta ~B} = 
+\sigma_{A~\theta ~B}(R \times S)
+\]</div>
+<ul>
+<li>最常用的连接是二个属性值的相等比较</li>
+<li>
+<p>θ为“＝”的连接运算称为等值连接</p>
+</li>
+<li>
+<p>自然连接（Natural join） </p>
+</li>
+<li>自然连接是一种特殊的等值连接；它要求两个关系中进行比较的分量必须是==相同的属性组==，并且在结果中==把重复的属性列去掉==</li>
+</ul>
+<div class="arithmatex">\[
+R \Join S = 
+\{
+t|
+\overset{\LARGE{\frown}}{t_r t_s[\overline{A}]},~
+t_r\in R \wedge  t_s\in S \wedge
+t_r[A] ~= ~ t_s[A]
+\}
+\]</div>
+<table>
+<thead>
+<tr>
+<th align="center">pic.一般的连接操作是从行的角度进行运算</th>
+<th>comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614182922242" src="../snippet.assets/image-20230614182922242.png"/></td>
+<td>而自然连接还需要取消重复列，所以是同时从行和列的角度进行运算。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="division">除运算（Division）</h3>
+<ul>
+<li>除法运算是一个二元运算，用表示</li>
+<li>若<span class="arithmatex">\(R \div S\)</span>，要求R和S有定义在同一域上的属性或属性组 </li>
+<li><span class="arithmatex">\(R \div S\)</span>的结果生成一个新关系R’，R’的属性是R的属性中去掉与S具有公共域属性的其它属性 </li>
+<li>设R(X，Y)，S(Y)，R’(X)。则<span class="arithmatex">\(R \div S\)</span>记为：</li>
+</ul>
+<div class="arithmatex">\[
+R \div S=R'=\{t|
+t\in R' 
+~\wedge~ 
+t_r\in R 
+~\wedge~ 
+t_s \in S 
+~\wedge~ 
+t_r[R']=t
+~\wedge~ 
+t\Join S \subseteq R
+\}
+\]</div>
+<ul>
+<li>结果集是R的属性中去掉与S具有公共域属性的其它属性</li>
+<li>举例说明除法运算的含义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"><span class="arithmatex">\(SC’\)</span></th>
+<th align="center"><span class="arithmatex">\(C'\)</span></th>
+<th align="center">$ C''$</th>
+<th align="center"><span class="arithmatex">\(SC'\div C'\)</span></th>
+<th align="center"><span class="arithmatex">\(SC'\div C''\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614184958293" src="../snippet.assets/image-20230614184958293.png"/></td>
+<td align="center"><img alt="image-20230614185030555" src="../snippet.assets/image-20230614185030555.png"/></td>
+<td align="center"><img alt="image-20230614185047673" src="../snippet.assets/image-20230614185047673.png"/></td>
+<td align="center"><img alt="image-20230614185148273" src="../snippet.assets/image-20230614185148273.png"/></td>
+<td align="center"><img alt="image-20230614185157076" src="../snippet.assets/image-20230614185157076.png"/></td>
+</tr>
+<tr>
+<td align="center">学生号班号表</td>
+<td align="center">班号表1</td>
+<td align="center">班号表2</td>
+<td align="center">选修了C1课的所有学生</td>
+<td align="center">同时选修了C2和C3课的所有学生</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>除操作是同时从行和列角度进行运算</li>
+</ul>
+<p>对于上面的除运算也可以用下式表示：
+$$
+R \div S = \Pi_X(R) - \Pi_X(\Pi_X(R)\Join S - R)
+$$
+上式中，<span class="arithmatex">\(X\)</span>为R中除去与S属性相同的其余属性。</p>
+<blockquote>
+<p>下面是一个别的例子，但用上面的公式做不了，具体来说就是应该从定义理解它，就是必须得是同时满足三条S表中的数据才能选出来如下：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"><span class="arithmatex">\(R\)</span></th>
+<th align="center"><span class="arithmatex">\(S\)</span></th>
+<th><span class="arithmatex">\(R\div S\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614190516043" src="../snippet.assets/image-20230614190516043.png"/></td>
+<td align="center"><img alt="image-20230614190451924" src="../snippet.assets/image-20230614190451924.png"/></td>
+<td><img alt="image-20230614190537613" src="../snippet.assets/image-20230614190537613.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">扩充的关系运算</h2>
+<h3 id="_10">外连接</h3>
+<ul>
+<li>连接运算是把二个关系中的元组按条件连接起来，结果为满足条件的元组集合，这样的连接称为内连接（inter join），还有一种连接称为外连接。</li>
+<li>外连接（outer join）是对自然连接运算的扩展。外连接结果中除了满足连接条件的元组外还包含没有被连接的元组。 </li>
+<li>左外连接</li>
+<li>左外连接的连接结果中包含了==关系R (左边关系)中====不满足连接条件==的元组，在这些元组==对应关系S属性上的值为空值==，记为：<span class="arithmatex">\(R\Join_L S\)</span></li>
+</ul>
+<h2 id="_11">关系代数的一个例子</h2>
+<p>【例】查询至少选修了一门其直接先行课为5号课程的课程的学生姓名。</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生表Student</th>
+<th align="center">课程表Course</th>
+<th align="center">成绩表SC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614201720596" src="../snippet.assets/image-20230614201720596.png"/></td>
+<td align="center"><img alt="image-20230614201751968" src="../snippet.assets/image-20230614201751968.png"/></td>
+<td align="center"><img alt="image-20230614201738209" src="../snippet.assets/image-20230614201738209.png"/></td>
+</tr>
+</tbody>
+</table>
+<p>关系代数：
+$$
+\Pi_{Sname}(\sigma_{Cpno=5}(Course\Join Student \Join SC))
+$$
+稍微优化一下（将操作移到每个表中去）：
+$$
+\Pi_{Sname}
+(
+    \sigma_{Cpno=5}(Course)
+\Join 
+    SC 
+\Join 
+    \Pi_{SNO,Sname}(Student)
+)\
+\Rightarrow 
+\Pi_{Sname}
+(
+    \Pi_{Sno}(
+        \sigma_{Cpno=5}(Course)\Join SC
+) 
+\Join 
+    \Pi_{SNO,Sname}(Student)
+)
+$$</p>
+<ul>
+<li>用关系代数运算可以完成对数据的检索、插入和删除操作 </li>
+<li>查询：查询的表达能力是其中最重要的部分<ul>
+<li>==选择(select),==</li>
+<li>==投影(project),==</li>
+<li>==连接(join),==</li>
+<li>==除(devide),==</li>
+<li>==并(union),== </li>
+<li>==差(difference),==</li>
+<li>==交(intersection),==</li>
+<li>==笛卡尔积等==</li>
+</ul>
+</li>
+<li>数据更新: 插入(insert),删除(delete),修改(update)</li>
+<li>关系操作的特点</li>
+<li>集合操作方式，操作的对象和结果都是集合<ul>
+<li>一次一集合</li>
+</ul>
+</li>
+<li>
+<p>非关系数据模型的数据操作方式</p>
+<ul>
+<li>一次一记录</li>
+</ul>
+</li>
+<li>
+<p>在关系代数运算中，并、差、笛卡儿积、选择、投影是基本的关系代数运算，其它的运算可以由这些基本运算表示。如： </p>
+</li>
+<li>交运算可用差运算表示：<span class="arithmatex">\(R \cap S = R - (R-S)\)</span></li>
+<li>连接运算可由选择和笛卡儿积表示：<span class="arithmatex">\(\mathop{R\Join S}\limits_{A~\theta~B} = \sigma_{A~\theta~B}(R \times S)\)</span> </li>
+<li>除运算可用下式表示：</li>
+</ul>
+<div class="arithmatex">\[
+R\div S = \Pi_X(R) - \Pi_X(\Pi_X(R) \times \Pi_Y(S)-R)
+\]</div>
+<ul>
+<li>
+<p>上式中，X为R中除去与S属性相同的其余属性，注意到这里实际上对上面的公式做了修改，而得到的<span class="arithmatex">\(\Pi_X(R) \times \Pi_Y(S)\)</span>的列名（模式）应该是和R是一致的才能做差集；</p>
+</li>
+<li>
+<p>关系代数运算</p>
+</li>
+<li>并、差、交、笛卡尔积、投影、选择、连接、除</li>
+<li>基本运算</li>
+<li>并、差、笛卡尔积、投影、选择</li>
+<li>交、连接、除法   ==可以用5种基本运算来表达==</li>
+<li>
+<p>引进它们并不增加语言的能力，但可以简化表达</p>
+</li>
+<li>
+<p>关系代数表达式</p>
+</li>
+<li>关系代数运算经有限次复合后形成的式子</li>
+</ul>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            回到页面顶部
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: 速记" class="md-footer__link md-footer__link--prev" href="../review/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                上一页
+              </span>
+              速记
+            </div>
+</div>
+</a>
+<a aria-label="下一页: Review" class="md-footer__link md-footer__link--next" href="../../04SQL/review/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                下一页
+              </span>
+              Review
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2022 linkdom
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/donglinkang2021" rel="noopener" target="_blank" title="Github | linkdom">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</a>
+<a class="md-social__link" href="https://space.bilibili.com/531177225" rel="noopener" target="_blank" title="Bilibili | 用心的小康同学">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"></path></svg>
+</a>
+<a class="md-social__link" href="https://www.cnblogs.com/linkdom/" rel="noopener" target="_blank" title="Cnblogs | linkdom">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "navigation.tracking", "navigation.index", "navigation.expand", "navigation.sections", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../../../assets/javascripts/bundle.39f04ddb.min.js"></script>
+<script src="../../../mkdocs/javascripts/mathjax.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

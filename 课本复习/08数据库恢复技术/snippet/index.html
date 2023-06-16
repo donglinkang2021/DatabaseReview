@@ -1,0 +1,1385 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="linkdom" name="author"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.5.2" name="generator"/>
+<title>八、数据库恢复技术 - 数据库复习</title>
+<link href="../../../assets/stylesheets/main.9f9400aa.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../mkdocs/css/unordered-list-symbols.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="orange" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="数据库复习" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            数据库复习
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              八、数据库恢复技术
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"></path></svg>
+</label>
+</form>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      README
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../DailyNote/">
+      DailyNote
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+      最后一套题总结
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        试题分析
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        课本复习
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="数据库复习" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    数据库复习
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        README
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../DailyNote/">
+        DailyNote
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+        最后一套题总结
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          试题分析
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="试题分析" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          试题分析
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        各个题型及对应知识点分析
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/1.%E5%A1%AB%E7%A9%BA%E9%A2%98/">
+        1.填空题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/2.%E5%88%A4%E6%96%AD%E9%A2%98/">
+        2.判断题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/3.%E5%8D%95%E9%A1%B9%E9%80%89%E6%8B%A9%E9%A2%98/">
+        3.单项选择题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/4.%E7%AE%80%E7%AD%94%E9%A2%98/">
+        4.简答题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/5.%E7%BB%BC%E5%90%88%E9%A2%98/">
+        5.综合题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/6.%E8%AE%BE%E8%AE%A1%E9%A2%98/">
+        6.设计题
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          课本复习
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="课本复习" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          课本复习
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_1" id="__nav_5_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_1">
+          01数据库系统引论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="01数据库系统引论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_1">
+<span class="md-nav__icon md-icon"></span>
+          01数据库系统引论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review_detail/">
+        一、数据库系统引论
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/snippet/">
+        一、数据库系统引论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_2" id="__nav_5_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_2">
+          02数据模型
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="02数据模型" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_2">
+<span class="md-nav__icon md-icon"></span>
+          02数据模型
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/snippet/">
+        二、数据模型
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_3" id="__nav_5_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_3">
+          03关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="03关系数据库" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_3">
+<span class="md-nav__icon md-icon"></span>
+          03关系数据库
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/snippet/">
+        三、关系数据库
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_4" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4">
+          04SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="04SQL" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
+<span class="md-nav__icon md-icon"></span>
+          04SQL
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/snippet/">
+        四、SQL
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_5" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5">
+          05查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="05查询处理和查询优化" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
+<span class="md-nav__icon md-icon"></span>
+          05查询处理和查询优化
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/snippet/">
+        五、查询处理和查询优化
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_6" id="__nav_5_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_6">
+          06数据库的安全性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="06数据库的安全性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_6">
+<span class="md-nav__icon md-icon"></span>
+          06数据库的安全性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/snippet/">
+        六、数据库的安全性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_7" id="__nav_5_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_7">
+          07数据库的完整性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="07数据库的完整性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_7">
+<span class="md-nav__icon md-icon"></span>
+          07数据库的完整性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/snippet/">
+        七、数据库的完整性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_8" id="__nav_5_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_8">
+          08数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="08数据库恢复技术" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_8">
+<span class="md-nav__icon md-icon"></span>
+          08数据库恢复技术
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          八、数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        八、数据库恢复技术
+      </a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    事务的基本概念和特征
+  </a>
+<nav aria-label="事务的基本概念和特征" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    事务的基本概念
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    事务特征
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    事务状态
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    数据库恢复的必要性
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    恢复的实现技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    数据转储
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    基于日志的数据库恢复
+  </a>
+<nav aria-label="基于日志的数据库恢复" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    日志文件内容
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    日志文件的作用
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    使用日志恢复数据库
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    事务故障的恢复
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    系统故障的恢复步骤
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    介质故障的恢复
+  </a>
+<nav aria-label="介质故障的恢复" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    利用静态转储的副本进行故障恢复
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    利用动态转储的副本进行故障恢复
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    介质故障恢复步骤（两步走）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    检查点恢复技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    数据库镜像恢复技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_21">
+    小结
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_9" id="__nav_5_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_9">
+          09并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="09并发控制" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_9">
+<span class="md-nav__icon md-icon"></span>
+          09并发控制
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/snippet/">
+        九、并发控制
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_10" id="__nav_5_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_10">
+          10关系数据库设计理论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="10关系数据库设计理论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_10">
+<span class="md-nav__icon md-icon"></span>
+          10关系数据库设计理论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/snippet/">
+        十、关系数据库设计理论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_11" id="__nav_5_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_11">
+          11数据库设计
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="11数据库设计" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_11">
+<span class="md-nav__icon md-icon"></span>
+          11数据库设计
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/snippet/">
+        十一、数据库设计
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_12" id="__nav_5_12" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_12">
+          12数据库编程
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="12数据库编程" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_12">
+<span class="md-nav__icon md-icon"></span>
+          12数据库编程
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/snippet/">
+        十二、数据库编程
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    事务的基本概念和特征
+  </a>
+<nav aria-label="事务的基本概念和特征" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    事务的基本概念
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    事务特征
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    事务状态
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    数据库恢复的必要性
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    恢复的实现技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    数据转储
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    基于日志的数据库恢复
+  </a>
+<nav aria-label="基于日志的数据库恢复" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    日志文件内容
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    日志文件的作用
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    使用日志恢复数据库
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    事务故障的恢复
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    系统故障的恢复步骤
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    介质故障的恢复
+  </a>
+<nav aria-label="介质故障的恢复" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    利用静态转储的副本进行故障恢复
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    利用动态转储的副本进行故障恢复
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    介质故障恢复步骤（两步走）
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    检查点恢复技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    数据库镜像恢复技术
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_21">
+    小结
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/donglinkang2021/DatabaseReview/edit/main/docs/课本复习/08数据库恢复技术/snippet.md" title="编辑此页">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="_1">八、数据库恢复技术</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">八、数据库恢复技术</a><ul>
+<li><a href="#_2">事务的基本概念和特征</a><ul>
+<li><a href="#_3">事务的基本概念</a></li>
+<li><a href="#_4">事务特征</a></li>
+</ul>
+</li>
+<li><a href="#_5">事务状态</a></li>
+<li><a href="#_6">数据库恢复的必要性</a></li>
+<li><a href="#_7">恢复的实现技术</a></li>
+<li><a href="#_8">数据转储</a></li>
+<li><a href="#_9">基于日志的数据库恢复</a><ul>
+<li><a href="#_10">日志文件内容</a></li>
+<li><a href="#_11">日志文件的作用</a></li>
+<li><a href="#_12">使用日志恢复数据库</a></li>
+</ul>
+</li>
+<li><a href="#_13">事务故障的恢复</a></li>
+<li><a href="#_14">系统故障的恢复步骤</a></li>
+<li><a href="#_15">介质故障的恢复</a><ul>
+<li><a href="#_16">利用静态转储的副本进行故障恢复</a></li>
+<li><a href="#_17">利用动态转储的副本进行故障恢复</a></li>
+</ul>
+</li>
+<li><a href="#_18">介质故障恢复步骤（两步走）</a></li>
+<li><a href="#_19">检查点恢复技术</a></li>
+<li><a href="#_20">数据库镜像恢复技术</a></li>
+<li><a href="#_21">小结</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2">事务的基本概念和特征</h2>
+<ul>
+<li>事务(Transaction)是用户定义的一个数据库操作序列，这些操作要么全做，要么全不做，是一个不可分割的工作单位</li>
+<li>事务是一系列的数据库操作，事务是恢复和并发控制的基本单位。</li>
+<li>事务和程序是两个概念</li>
+<li>在关系数据库中，一个事务==可以是一条SQL语句==，==一组SQL语句或整个程序==</li>
+<li>一个应用程序通常包含多个事务</li>
+<li>事务处理技术主要包括数据库恢复技术和并发控制技术</li>
+</ul>
+<h3 id="_3">事务的基本概念</h3>
+<ul>
+<li>如何定义事务</li>
+<li>显式定义方式</li>
+<li>隐式方式：当用户没有显式地定义事务时，DBMS按缺省规定自动划分事务</li>
+</ul>
+<pre><code class="language-sql">BEGIN TRANSACTION
+SQL 语句1
+......
+COMMIT
+</code></pre>
+<pre><code class="language-sql">BEGIN TRANSACTION
+SQL 语句2
+......
+ROLLBACK
+</code></pre>
+<ul>
+<li>COMMIT   提交事务</li>
+<li>事务正常结束 ,提交事务的所有操作（读+更新）,事务中所有对数据库的更新永久生效</li>
+<li>ROLLBACK  回滚事务</li>
+<li>事务异常终止<ul>
+<li>事务运行的过程中发生了故障，不能继续执行</li>
+</ul>
+</li>
+<li>回滚事务的所有更新操作,恢复到事务开始时的状态</li>
+</ul>
+<h3 id="_4">事务特征</h3>
+<ul>
+<li>事务的四个特性：</li>
+<li>原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持续性（Durability ），简称==ACID特性==</li>
+<li>原子性（Atomicity）</li>
+<li>事务是数据库的逻辑工作单位，事务中包括的诸操作要么都做，要么都不做</li>
+<li>一致性（Consistency）</li>
+<li>事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态</li>
+<li>一致性状态：数据库中只包含成功事务提交的结果</li>
+<li>不一致状态：数据库中包含失败事务的结果</li>
+</ul>
+<hr/>
+<table>
+<thead>
+<tr>
+<th>银行转帐：从帐号A中取出一万元，存入帐号B。<br/></th>
+<th><img alt="image-20230615120909968" src="../snippet.assets/image-20230615120909968.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>定义一个事务，该事务包括两个操作</li>
+<li>这两个操作要么全做，要么全不做</li>
+<li>全做或者全不做，数据库都处于一致性状态。</li>
+<li>如果只做一个操作，数据库就处于不一致性状态</li>
+</ul>
+<hr/>
+<ul>
+<li>
+<p>隔离性</p>
+</li>
+<li>
+<p>对并发执行而言,一个事务的执行不能被其他事务干扰</p>
+</li>
+<li>
+<p>一个事务内部的操作及使用的数据对其他并发事务是隔离的</p>
+</li>
+<li>
+<p>并发执行的各个事务之间不能互相干扰</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>T1的修改被T2覆盖了！</th>
+<th><img alt="image-20230615121237540" src="../snippet.assets/image-20230615121237540.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>持续性</li>
+<li>持续性也称永久性（Permanence）</li>
+<li>一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。</li>
+<li>接下来的其他操作或故障不应该对其执行结果有任何影响。</li>
+</ul>
+<h2 id="_5">事务状态</h2>
+<ul>
+<li>
+<p>事务应该处在下列状态之一： </p>
+</li>
+<li>
+<p>==活动状态（active）==</p>
+<ul>
+<li>初始状态，事务执行时事务处于活动状态。</li>
+</ul>
+</li>
+<li>==部分提交状态（partially committed）==<ul>
+<li>事务最后一条语句被执行完毕后进入部分提交状态</li>
+<li>事务中对数据的操作已经全部完成，但结果数据还驻留在内存中。</li>
+<li>如果在此状态时，系统出现故障仍可能使事务不得不终止</li>
+</ul>
+</li>
+<li>
+<p>==失败状态（failed）==</p>
+<ul>
+<li>如果事务不能正常执行，事务就进入失败状态。</li>
+<li>这意味着事务没有成功地完成，必须回滚。</li>
+<li>回滚(Rollback)就是撤消事务已经做出任何数据更改</li>
+</ul>
+</li>
+<li>
+<p>==终止状态（aborted）==</p>
+<ul>
+<li>事务回滚并且数据库已经恢复到事务执行前的状态。</li>
+</ul>
+</li>
+<li>
+<p>==提交状态（committed）==</p>
+<ul>
+<li>当数据库系统将事务中对数据的更改完全写入磁盘时，写入一条事务日志信息，标志着事务成功完成，这时事务就进入了提交状态。 </li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230615121620908" src="../snippet.assets/image-20230615121620908.png"/></th>
+<th>事务状态转移图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>事务从活动状态开始，当==完成最后一条语句后==进入部分提交状态</li>
+<li>此刻，事务虽已完成，但结果数据仍驻留在内存中，某些故障可能导致其失败</li>
+<li>把结果数据写入外部存储器中，事务进入提交状态</li>
+<li>当事务不能正常执行时，进入失败状态</li>
+<li>失败状态的事务必须撤消，事务进入中止状态</li>
+</ul>
+<h2 id="_6">数据库恢复的必要性</h2>
+<ul>
+<li>数据库系统可能发生各种各样的故障，大致可分为：</li>
+<li>系统故障</li>
+<li>事务内部的故障</li>
+<li>存储设备故障</li>
+<li>其它原因</li>
+</ul>
+<h2 id="_7">恢复的实现技术</h2>
+<ul>
+<li>数据恢复的基本原理</li>
+<li>==数据冗余==:    利用存储在系统其它地方的冗余数据来重建数据库中已被破坏或不正确的那部分数据</li>
+<li>恢复机制涉及的关键问题</li>
+<li>如何建立冗余数据<ul>
+<li>数据转储（backup）</li>
+<li>登记日志文件（logging）</li>
+</ul>
+</li>
+<li>如何利用这些冗余数据实施数据库恢复</li>
+<li>建立冗余数据最常用的技术是</li>
+<li>==数据转储==和==登记日志文件==</li>
+<li>通常在一个数据库系统中，这两种方法一起使用</li>
+</ul>
+<h2 id="_8">数据转储</h2>
+<ul>
+<li>数据转储是数据库恢复中采用的基本技术</li>
+<li>DBA定期地将整个数据库复制到磁带或另一个磁盘上保存起来的过程。<ul>
+<li>这些备用的数据文本称为后备副本或后援副本</li>
+</ul>
+</li>
+<li>数据库遭到破坏后可以将后备副本重新装入<ul>
+<li>重装后备副本只能将数据库恢复到转储时的状态</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20230615121947169" src="../snippet.assets/image-20230615121947169.png"/></p>
+<h2 id="_9">基于日志的数据库恢复</h2>
+<ul>
+<li>数据库系统日志文件</li>
+<li>记录有关事务的数据库操作信息 </li>
+<li>日志文件的格式<ul>
+<li>以记录为单位的日志文件</li>
+<li>以数据块为单位的日志文件 </li>
+</ul>
+</li>
+<li>日志文件内容<ul>
+<li>事务标识，操作类型，操作对象，更新前后的数据值 </li>
+<li>两条原则：登记的次序严格按并行事务执行的时间次序；必须先写日志文件，后写数据库</li>
+</ul>
+</li>
+</ul>
+<h3 id="_10">日志文件内容</h3>
+<ul>
+<li>以记录为单位的日志文件</li>
+<li>&lt; Start Ti&gt;，表示事务Ti开始。 </li>
+<li><ti， xj，v1，v2="">，表示事务Ti对数据项Xj执行写操作。旧值是V1,新值是V2。  </ti，></li>
+<li>&lt; Commit Ti&gt;，表示事务Ti已提交。事务对数据库所做的任何更新都写入到数据缓冲区中，通常不能确定磁盘是否已经进行更新 </li>
+<li>&lt; Abort Ti&gt;，表示事务Ti已中止。表明事务不能成功完成。如果事务中止，系统将确保这一事务的更新不会对数据库造成影响 </li>
+</ul>
+<h3 id="_11">日志文件的作用</h3>
+<ul>
+<li>==事务故障恢复==和==系统故障恢复==必须用日志文件</li>
+<li>==介质故障恢复==必须用日志文件</li>
+<li>在动态转储方式中必须建立日志文件，后备副本与该日志文件综合起来才能将数据库恢复到一致性状态</li>
+<li>
+<p>与静态转储后备副本配合进行==介质故障恢复==</p>
+<ul>
+<li>静态转储的数据已是一致性的数据</li>
+<li>如果静态转储完成后，仍能定期转储日志文件，则在出现介质故障重装数据副本后，可以利用这些日志文件副本对已完成的事务进行重做处理</li>
+<li>可以把数据库恢复到故障前某一时刻的正确状态（不必重新运行那些已完成的事务程序）</li>
+</ul>
+</li>
+<li>
+<p>为保证数据库是可恢复的，登记日志文件时必须遵循两条原则</p>
+</li>
+<li>登记的次序严格按并行事务执行的时间次序</li>
+<li>
+<p>必须==先写日志文件，后写数据库==</p>
+<ul>
+<li>写数据库和写日志文件是两个不同的操作，</li>
+<li>在这两个操作之间可能发生故障，如果先写了数据库修改，而在日志文件中没有登记下这个修改，则以后就无法恢复这个修改了</li>
+<li>如果先写日志，但没有修改数据库，按日志文件恢复时只不过是多执行一次不必要的UNDO操作，并不会影响数据库的正确性</li>
+</ul>
+</li>
+<li>
+<p>写日志文件操作：把表示这个修改的日志记录写到日志文件</p>
+</li>
+<li>写数据库操作：把对数据的修改写到数据库中</li>
+</ul>
+<h3 id="_12">使用日志恢复数据库</h3>
+<ul>
+<li>
+<p>基于日志的恢复技术：</p>
+</li>
+<li>
+<p>Redo技术</p>
+<ul>
+<li>在日志中记录所有数据库写修改操作， </li>
+<li>如果发生故障，可以用Redo操作重做事务，恢复已完成的事务 </li>
+</ul>
+</li>
+<li>
+<p>Undo恢复技术</p>
+<ul>
+<li>
+<p>在事务执行过程中修改了数据库而事务还没提交</p>
+</li>
+<li>
+<p>此时如果系统崩溃，可以利用Undo恢复技术（撤销事务）</p>
+</li>
+<li>
+<p>将被修改的数据项恢复到事务开始前的状态。 </p>
+</li>
+</ul>
+</li>
+<li>
+<p>Undo操作的过程</p>
+<ul>
+<li>
+<p>检查日志文件，寻找事务Ti执行write(X)操作前写入日志的记录， </p>
+</li>
+<li>
+<p>把数据库中的X项的值重新修改为更新前的旧值</p>
+</li>
+<li>
+<p>如果事务Ti有多个write操作，Undo write操作的顺序必须与write操作时写入</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="_13">事务故障的恢复</h2>
+<ul>
+<li>事务故障：事务在运行至正常终止点前被中止</li>
+<li>恢复方法：利用日志文件撤销事务对数据的更改，系统回滚到事务执行前的状态 </li>
+<li>事务故障的恢复由系统自动完成，不需要用户干预</li>
+<li>(1) 反向扫描文件日志，查找该事务的更新操作。</li>
+<li>(2) 对该事务的更新操作执行逆操作。即将日志记录中“更新前的值”（Before Image, BI）写入数据库。</li>
+<li>(3) 继续反向扫描日志文件，查找该事务的其他更新操作，并做同样处理。</li>
+<li>
+<p>(4) 如此处理下去，直至读到此事务的开始标记，事务故障恢复就完成了。</p>
+</li>
+<li>
+<p>系统故障造成数据库不一致状态的原因</p>
+</li>
+<li>一些未完成事务对数据库的更新已写入数据库</li>
+<li>一些已提交事务对数据库的更新还留在缓冲区没来得及写入数据库</li>
+<li>恢复方法</li>
+<li>Undo 故障发生时未完成的事务</li>
+<li>Redo 已完成的事务</li>
+<li>系统故障的恢复由系统在==重新启动时==自动完成，不需要用户干预</li>
+</ul>
+<h2 id="_14">系统故障的恢复步骤</h2>
+<ul>
+<li>(1) 正向扫描日志文件（即从头扫描日志文件）</li>
+<li>Redo队列:在故障发生前已经提交的事务</li>
+<li>Undo队列:故障发生时尚未完成的事务</li>
+<li>(2) 对Undo队列事务进行UNDO处理</li>
+<li>反向扫描日志文件，对每个UNDO事务的更 新操作执行逆操作</li>
+<li>(3) 对Redo队列事务进行REDO处理</li>
+<li>正向扫描日志文件，对每个REDO事务重新执行登记的操作</li>
+</ul>
+<h2 id="_15">介质故障的恢复</h2>
+<ul>
+<li>恢复方法</li>
+<li>重装数据库，使数据库恢复到一致性状态</li>
+<li>重做已完成的事务</li>
+<li>介质故障的恢复需要DBA介入</li>
+<li>重装最近转储的数据库副本和相关日志文件副本</li>
+<li>执行系统提供的恢复命令</li>
+<li>具体的恢复操作仍由DBMS完成</li>
+</ul>
+<h3 id="_16">利用静态转储的副本进行故障恢复</h3>
+<p><img alt="image-20230615133649727" src="../snippet.assets/image-20230615133649727.png"/></p>
+<ul>
+<li>系统在Ta时刻停止运行事务，进行数据库转储</li>
+<li>在Tb时刻转储完毕，得到Tb时刻的数据库一致性副本</li>
+<li>系统运行到Tf时刻发生故障</li>
+<li>为恢复数据库，首先由DBA重装数据库后备副本，将数据库恢复至Tb时刻的状态</li>
+<li>重新运行自Tb～Tf时刻的所有更新事务，把数据库恢复到故障发生前的一致状态</li>
+<li>可以利用这些日志文件副本对已完成的事务进行重做处理</li>
+</ul>
+<h3 id="_17">利用动态转储的副本进行故障恢复</h3>
+<p><img alt="image-20230615133851564" src="../snippet.assets/image-20230615133851564.png"/></p>
+<ul>
+<li>利用动态转储得到的副本进行故障恢复</li>
+<li>需要把动态转储期间各事务对数据库的修改活动登记下来，建立日志文件</li>
+<li>后备副本加上日志文件才能把数据库恢复到某一时刻的正确状态</li>
+</ul>
+<h2 id="_18">介质故障恢复步骤（两步走）</h2>
+<ul>
+<li>(1) 装入最新的后备数据库副本，使数据库恢复到最近一次转储时的一致性状态。</li>
+<li>对于==静态转储==的数据库副本，装入后数据库即处于一致性状态</li>
+<li>对于==动态转储==的数据库副本，还须同时装入转储时刻的日志文件副本,利用与恢复系统故障相同的方法(即REDO+UNDO),才能将数据库恢复到一致性状态</li>
+<li>(2) 装入有关的日志文件副本，重做已完成的事务。</li>
+<li>首先扫描日志文件，找出故障发生时已提交的事务的标识，将其记入重做队列。</li>
+<li>然后正向扫描日志文件，对重做队列中的所有事务进行重做处理。即将日志记录中“更新后的值”写入数据库。</li>
+</ul>
+<h2 id="_19">检查点恢复技术</h2>
+<ul>
+<li>检查点（checkpoint）是记录在日志中表示数据库==是否正常运行==的一个标志 ，以记录所有当前活动的事务</li>
+<li>检查点记录的内容</li>
+<li>
+<ol>
+<li>建立检查点时刻所有正在执行的事务清单</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>这些事务最近一个日志记录的地址</li>
+</ol>
+</li>
+<li>建立检查点原则</li>
+<li>定期：按照预定的一个时间间隔</li>
+<li>不定期：按照某种规则，如日志文件已写满一半建立一个检查点</li>
+<li>数据库恢复时，利用检查点能判定哪些事务是正常结束的，从而确定恢复哪些数据以及如何进行恢复</li>
+<li>重启动文件记录各个检查点记录在日志文件中的地址</li>
+<li>周期性的建立检查点，动态维护维护日志文件</li>
+<li>把日志缓冲区中的内容写入日志文件； </li>
+<li>在日志文件中写入一个检查点记录；</li>
+<li>==把数据库缓冲区的内容写入数据库；==</li>
+<li>把检查点记录在日志文件中的地址写入重启动文件</li>
+</ul>
+<blockquote>
+<p>这里也考过，顺序肯定是写日志为第一步、接着写检查点记录、接着写入数据库、接着写重新开始文件</p>
+</blockquote>
+<p><img alt="image-20230615135257408" src="../snippet.assets/image-20230615135257408.png"/></p>
+<ul>
+<li>使用检查点方法可以改善恢复效率</li>
+<li>当事务T在一个检查点之前提交<ul>
+<li>由检查点记录知， T对数据库所做的修改已写入数据库，在进行恢复处理时，没有必要对事务T执行REDO操作</li>
+</ul>
+</li>
+<li>
+<p>==只运行检查点记录之后的操作即可==</p>
+</li>
+<li>
+<p>系统出现故障时，恢复子系统将根据事务的不同状态采取不同的恢复策略 </p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230615135623441" src="../snippet.assets/image-20230615135623441.png"/></th>
+<th>恢复策略👇</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1：在检查点之前提交</td>
+<td></td>
+</tr>
+<tr>
+<td>T2：在检查点之前开始执行，在检查点之后故障点之前提交</td>
+<td></td>
+</tr>
+<tr>
+<td>T3：在检查点之前开始执行，在故障点时还未完成</td>
+<td></td>
+</tr>
+<tr>
+<td>T4：在检查点之后开始执行，在故障点之前提交</td>
+<td></td>
+</tr>
+<tr>
+<td>T5：在检查点之后开始执行，在故障点时还未完成</td>
+<td><img alt="" src="../snippet.assets/image-20230615135655458.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_20">数据库镜像恢复技术</h2>
+<blockquote>
+<p>数据库镜像是指在不同的设备上同时存在两份数据库，一个是主设备，另一个是镜像 设备。所谓镜像的含义是指每当主设备的数据库发生更新时，系统自动更新镜像设备的数据，使得两个设备的数据始终保持一致。数据库镜像技术可用于存储设备故障的恢复，一 旦主设备出现故障，可以由镜像设备继续提供数据。</p>
+<p>--考简答题</p>
+</blockquote>
+<ul>
+<li>介质故障是对系统影响最为严重的一种故障</li>
+<li>介质故障恢复比较费时</li>
+<li>为预防介质故障，DBA必须周期性地转储数据库</li>
+<li>提高数据库可用性的解决方案,数据库镜像(Mirror) </li>
+<li>DBMS自动把整个数据库或其中的关键数据复制到另一个磁盘上</li>
+<li>DBMS自动保证镜像数据与主数据的一致性<ul>
+<li>每当主数据库更新时，DBMS自动把更新后的数据复制过去</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20230615140000351" src="../snippet.assets/image-20230615140000351.png"/></p>
+<h2 id="_21">小结</h2>
+<ul>
+<li>恢复的基本原理</li>
+<li>利用存储在后备副本、日志文件和数据库镜像中的冗余数据来重建数据库</li>
+<li>常用恢复技术</li>
+<li>事务故障的恢复  UNDO</li>
+<li>系统故障的恢复  UNDO + REDO</li>
+<li>介质故障的恢复<ul>
+<li>重装备份并恢复到一致性状态+REDO</li>
+</ul>
+</li>
+<li>提高恢复效率的技术</li>
+<li>检查点技术<ul>
+<li>可以提高系统故障的恢复效率</li>
+<li>可以在一定程度上提高利用动态转储备份进行介质故障恢复的效率</li>
+</ul>
+</li>
+<li>镜像技术：镜像技术可以改善介质故障的恢复效率</li>
+</ul>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            回到页面顶部
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: 速记" class="md-footer__link md-footer__link--prev" href="../review/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                上一页
+              </span>
+              速记
+            </div>
+</div>
+</a>
+<a aria-label="下一页: 速记" class="md-footer__link md-footer__link--next" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/review/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                下一页
+              </span>
+              速记
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2022 linkdom
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/donglinkang2021" rel="noopener" target="_blank" title="Github | linkdom">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</a>
+<a class="md-social__link" href="https://space.bilibili.com/531177225" rel="noopener" target="_blank" title="Bilibili | 用心的小康同学">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"></path></svg>
+</a>
+<a class="md-social__link" href="https://www.cnblogs.com/linkdom/" rel="noopener" target="_blank" title="Cnblogs | linkdom">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "navigation.tracking", "navigation.index", "navigation.expand", "navigation.sections", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../../../assets/javascripts/bundle.39f04ddb.min.js"></script>
+<script src="../../../mkdocs/javascripts/mathjax.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,1603 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="linkdom" name="author"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.5.2" name="generator"/>
+<title>九、并发控制 - 数据库复习</title>
+<link href="../../../assets/stylesheets/main.9f9400aa.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../mkdocs/css/unordered-list-symbols.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="orange" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="数据库复习" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            数据库复习
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              九、并发控制
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"></path></svg>
+</label>
+</form>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      README
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../DailyNote/">
+      DailyNote
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+      最后一套题总结
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        试题分析
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        课本复习
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="数据库复习" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    数据库复习
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        README
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../DailyNote/">
+        DailyNote
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+        最后一套题总结
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          试题分析
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="试题分析" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          试题分析
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        各个题型及对应知识点分析
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/1.%E5%A1%AB%E7%A9%BA%E9%A2%98/">
+        1.填空题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/2.%E5%88%A4%E6%96%AD%E9%A2%98/">
+        2.判断题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/3.%E5%8D%95%E9%A1%B9%E9%80%89%E6%8B%A9%E9%A2%98/">
+        3.单项选择题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/4.%E7%AE%80%E7%AD%94%E9%A2%98/">
+        4.简答题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/5.%E7%BB%BC%E5%90%88%E9%A2%98/">
+        5.综合题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/6.%E8%AE%BE%E8%AE%A1%E9%A2%98/">
+        6.设计题
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          课本复习
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="课本复习" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          课本复习
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_1" id="__nav_5_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_1">
+          01数据库系统引论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="01数据库系统引论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_1">
+<span class="md-nav__icon md-icon"></span>
+          01数据库系统引论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review_detail/">
+        一、数据库系统引论
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/snippet/">
+        一、数据库系统引论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_2" id="__nav_5_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_2">
+          02数据模型
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="02数据模型" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_2">
+<span class="md-nav__icon md-icon"></span>
+          02数据模型
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/snippet/">
+        二、数据模型
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_3" id="__nav_5_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_3">
+          03关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="03关系数据库" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_3">
+<span class="md-nav__icon md-icon"></span>
+          03关系数据库
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/snippet/">
+        三、关系数据库
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_4" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4">
+          04SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="04SQL" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
+<span class="md-nav__icon md-icon"></span>
+          04SQL
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/snippet/">
+        四、SQL
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_5" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5">
+          05查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="05查询处理和查询优化" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
+<span class="md-nav__icon md-icon"></span>
+          05查询处理和查询优化
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../05%E6%9F%A5%E8%AF%A2%E5%A4%84%E7%90%86%E5%92%8C%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/snippet/">
+        五、查询处理和查询优化
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_6" id="__nav_5_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_6">
+          06数据库的安全性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="06数据库的安全性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_6">
+<span class="md-nav__icon md-icon"></span>
+          06数据库的安全性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/snippet/">
+        六、数据库的安全性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_7" id="__nav_5_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_7">
+          07数据库的完整性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="07数据库的完整性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_7">
+<span class="md-nav__icon md-icon"></span>
+          07数据库的完整性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/snippet/">
+        七、数据库的完整性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_8" id="__nav_5_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_8">
+          08数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="08数据库恢复技术" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_8">
+<span class="md-nav__icon md-icon"></span>
+          08数据库恢复技术
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/snippet/">
+        八、数据库恢复技术
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_9" id="__nav_5_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_9">
+          09并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="09并发控制" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_9">
+<span class="md-nav__icon md-icon"></span>
+          09并发控制
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          九、并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        九、并发控制
+      </a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    问题提出
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    并发事务运行存在的异常问题
+  </a>
+<nav aria-label="并发事务运行存在的异常问题" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+    1. 丢失更新
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+    2. 不可重复读
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+    3. 读“脏”数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    异常问题
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    并发调度的可串行性
+  </a>
+<nav aria-label="并发调度的可串行性" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    可串行化调度
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    调度的冲突等价性
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    调度的状态等价性
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    锁
+  </a>
+<nav aria-label="锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    锁的相容矩阵
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    封锁协议
+  </a>
+<nav aria-label="封锁协议" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1_1">
+    1．一级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2_1">
+    2．二级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3_1">
+    3．三级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    一致性保证
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    活锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    死锁
+  </a>
+<nav aria-label="死锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    预防死锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    死锁的检测与恢复
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    两阶段封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    多粒度封锁
+  </a>
+<nav aria-label="多粒度封锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    意向锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    意向锁的相容矩阵
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_10" id="__nav_5_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_10">
+          10关系数据库设计理论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="10关系数据库设计理论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_10">
+<span class="md-nav__icon md-icon"></span>
+          10关系数据库设计理论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/snippet/">
+        十、关系数据库设计理论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_11" id="__nav_5_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_11">
+          11数据库设计
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="11数据库设计" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_11">
+<span class="md-nav__icon md-icon"></span>
+          11数据库设计
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/snippet/">
+        十一、数据库设计
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_12" id="__nav_5_12" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_12">
+          12数据库编程
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="12数据库编程" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_12">
+<span class="md-nav__icon md-icon"></span>
+          12数据库编程
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/snippet/">
+        十二、数据库编程
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    问题提出
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    并发事务运行存在的异常问题
+  </a>
+<nav aria-label="并发事务运行存在的异常问题" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1">
+    1. 丢失更新
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2">
+    2. 不可重复读
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3">
+    3. 读“脏”数据
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    异常问题
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    并发调度的可串行性
+  </a>
+<nav aria-label="并发调度的可串行性" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    可串行化调度
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    调度的冲突等价性
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    调度的状态等价性
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    锁
+  </a>
+<nav aria-label="锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    锁的相容矩阵
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    封锁协议
+  </a>
+<nav aria-label="封锁协议" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1_1">
+    1．一级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2_1">
+    2．二级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3_1">
+    3．三级封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    一致性保证
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    活锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    死锁
+  </a>
+<nav aria-label="死锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+    预防死锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+    死锁的检测与恢复
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+    两阶段封锁协议
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+    多粒度封锁
+  </a>
+<nav aria-label="多粒度封锁" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+    意向锁
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+    意向锁的相容矩阵
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/donglinkang2021/DatabaseReview/edit/main/docs/课本复习/09并发控制/snippet.md" title="编辑此页">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="_1">九、并发控制</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">九、并发控制</a><ul>
+<li><a href="#_2">问题提出</a></li>
+<li><a href="#_3">并发事务运行存在的异常问题</a><ul>
+<li><a href="#1">1. 丢失更新</a></li>
+<li><a href="#2">2. 不可重复读</a></li>
+<li><a href="#3">3. 读“脏”数据</a></li>
+<li><a href="#_4">异常问题</a></li>
+</ul>
+</li>
+<li><a href="#_5">并发调度的可串行性</a><ul>
+<li><a href="#_6">可串行化调度</a></li>
+<li><a href="#_7">调度的冲突等价性</a></li>
+<li><a href="#_8">调度的状态等价性</a></li>
+</ul>
+</li>
+<li><a href="#_9">锁</a><ul>
+<li><a href="#_10">锁的相容矩阵</a></li>
+</ul>
+</li>
+<li><a href="#_11">封锁协议</a><ul>
+<li><a href="#1_1">1．一级封锁协议</a></li>
+<li><a href="#2_1">2．二级封锁协议</a></li>
+<li><a href="#3_1">3．三级封锁协议</a></li>
+<li><a href="#_12">一致性保证</a></li>
+</ul>
+</li>
+<li><a href="#_13">活锁</a></li>
+<li><a href="#_14">死锁</a><ul>
+<li><a href="#_15">预防死锁</a></li>
+<li><a href="#_16">死锁的检测与恢复</a></li>
+</ul>
+</li>
+<li><a href="#_17">两阶段封锁协议</a></li>
+<li><a href="#_18">多粒度封锁</a><ul>
+<li><a href="#_19">意向锁</a></li>
+<li><a href="#_20">意向锁的相容矩阵</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2">问题提出</h2>
+<ul>
+<li>多事务执行方式(续)</li>
+<li>(1)事务串行执行</li>
+<li>(2)交叉并发方式interleaved concurrency<ul>
+<li>并行事务的并行操作轮流交叉运行</li>
+<li>是单处理机系统中的并发方式，能够减少处理机的空闲时间，提高系统的效率</li>
+</ul>
+</li>
+<li>(3)同时并发方式simultaneous  concurrency<ul>
+<li>多处理机系统中，每个处理机可以运行一个事务，多个处理机可以同时运行多个事务，实现多个事务真正的并行运行</li>
+<li>最理想的并发方式受制于硬件环境、更复杂的机制</li>
+</ul>
+</li>
+</ul>
+<h2 id="_3">并发事务运行存在的异常问题</h2>
+<h3 id="1">1. 丢失更新</h3>
+<ul>
+<li>以飞机定票系统为例， 
+  甲售票点事务T1和乙售票点事务T2同时读取某航班的机票余额R=100 ；</li>
+<li>分别售出1张机票
+    结果明明卖出两张机票，数据库中机票余额只减少1</li>
+<li>丢失更新是指</li>
+<li>事务1与事务2从数据库中读入同一数据并修改</li>
+<li>事务2的提交结果破坏了事务1提交的结果，导致事务1的修改被丢失。</li>
+</ul>
+<h3 id="2">2. 不可重复读</h3>
+<ul>
+<li>
+<p>不可重复读是事务T1读取数据后，T2对同一数据执行更新操作，使T1再次读取该数据时，得到与前一次不同的值。 </p>
+</li>
+<li>
+<p>三类不可重复读：</p>
+</li>
+<li>​    事务1读取某一数据后：</li>
+<li>T2对其做了修改,当T1再次读该数据时,得到与前一次==不同的值==</li>
+<li>T2删除了其中部分记录，当T1再次读取数据时，==某些记录消失==</li>
+<li>T2插入了一些记录，当T1再次按相同条件读数据时, ==多了一些记录==</li>
+<li>后两种不可重复读有时也称为==幻影现象==（phantom row）（多了一些值和少了一些值都称为幻影现象）</li>
+</ul>
+<h3 id="3">3. 读“脏”数据</h3>
+<ul>
+<li>事务1修改某一数据，并将其写回磁盘</li>
+<li>事务2读取同一数据后,事务1由于某种原因被撤消，这时事务1已修改过的数据恢复原值</li>
+<li>事务2读到的数据就与数据库中的数据不一致，是不正确的数据，又称为“脏”数据。</li>
+</ul>
+<h3 id="_4">异常问题</h3>
+<p>并发操作带来的数据不一致性
+1. 丢失更新（lost update）
+2. 不可重复读(non-repeatable read)
+3. 读“脏”数据(dirty read)</p>
+<table>
+<thead>
+<tr>
+<th align="center">丢失更新</th>
+<th align="center">不可重复读</th>
+<th align="center">读“脏”数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230615140815103" src="../snippet.assets/image-20230615140815103.png"/></td>
+<td align="center"><img alt="image-20230615140756115" src="../snippet.assets/image-20230615140756115.png"/></td>
+<td align="center"><img alt="image-20230615140735027" src="../snippet.assets/image-20230615140735027.png"/></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>这种数据库的不一致性是由并发操作引起的，主要原因是==并发操作破坏了事务的隔离性==</li>
+<li>并发控制机制要用正确的方式调度并发操作，使一个用户事务的执行不受其他事务的干扰，避免造成数据的不一致性 <ul>
+<li>保证事务的==隔离性==</li>
+<li>保证数据库的==一致性==</li>
+</ul>
+</li>
+</ul>
+<h2 id="_5">并发调度的可串行性</h2>
+<ul>
+<li>
+<p>计算机系统对并行事务中并行操作的调度是随机的，而不同的调度可能会产生不同的结果。</p>
+</li>
+<li>
+<p>==将所有事务串行起来的调度策略是正确的调度策略==。</p>
+</li>
+<li>
+<p>如果一个事务运行过程中没有其他事务在同时运行，也就是说它没有受到其他事务的干扰，那么就可以认为该事务的运行结果是正常的或者预想的</p>
+</li>
+<li>
+<p>==以不同的顺序串行执行事务也有可能会产生不同的结果==，但由于不会将数据库置于不一致状态，所以==都可以认为是正确的==</p>
+</li>
+</ul>
+<h3 id="_6">可串行化调度</h3>
+<p>定义9.1 多个事务的并发执行是正确的，当且仅当并发执行的结果与这些事务按某一串行顺序执行的结果相同,这种调度策略被称为==可串行化调度==。</p>
+<p>==可串行化是并发事务正确调度的准则== 。</p>
+<ul>
+<li>可串行性是并行事务正确性的唯一准则</li>
+<li>按这个准则规定，一个给定的并发调度，当且仅当它是可串化的，才认为是正确调度</li>
+<li>例：现在有两个事务，分别包含下列操作：</li>
+<li>事务1：读B；A=B+1；写回A；</li>
+<li>事务2：读A；B=A+1；写回B；</li>
+<li>假设A的初值为2，B的初值为2。</li>
+<li>对这两个事务的不同调度策略</li>
+<li>串行执行<ul>
+<li>(a)串行调度策略、 (b)串行调度策略</li>
+</ul>
+</li>
+<li>交错执行<ul>
+<li>(c)不可串行化的调度、 (d)可串行化的调度</li>
+</ul>
+</li>
+</ul>
+<h3 id="_7">调度的冲突等价性</h3>
+<ul>
+<li>冲突操作</li>
+<li>冲突操作是指==不同的事务对同一个数据的读写操作和写写操作==<ul>
+<li>Ri(x)与Wj(x)             /<em> 事务Ti读x，Tj写x</em>/</li>
+<li>Wi(x)与Wj(x)             /<em> 事务Ti写x，Tj写x</em>/</li>
+</ul>
+</li>
+<li>其他操作是不冲突操作</li>
+<li>不同事务的冲突操作和同一事务的两个操作不能交换(Swap) </li>
+</ul>
+<p>定义9.2  如果一个调度S能通过一系列==非冲突操作==执行顺序的交换变成调度S1，则称==调度S和S1冲突等价==。 </p>
+<p>【例 9-3】证明调度S是否是可串行化调度。
+$$
+S=R_1(A)W_1(A)R_2(A)W_2(A)R_1(B)W_1(B)R_2(B)W_2(B)
+$$</p>
+<ul>
+<li>
+<p>S=R1(A)W1(A)<u>R2(A)</u><strong>W2(A)</strong>==R1(B)W1(B)==R2(B)W2(B)</p>
+</li>
+<li>
+<p>把<strong>W2(A)</strong>与==R1(B)W1(B)==交换，得到：</p>
+</li>
+<li>
+<p>R1(A)W1(A<u>)R2(A)</u>==R1(B)W1(B)==<strong>W2(A)</strong>R2(B)W2(B)</p>
+</li>
+<li>
+<p>再把<u>R2(A)</u>与==R1(B)W1(B)==交换：</p>
+</li>
+<li>L= R1(A)W1(A)==R1(B)W1(B)==<u>R2(A)</u><strong>W2(A)</strong>R2(B)W2(B)</li>
+<li>因为L等价于一个串行调度T1，T2</li>
+<li>所以调度S是可串行化的调度</li>
+<li>L和S是(冲突)==等价的== </li>
+</ul>
+<blockquote>
+<p>也就是可以看到将下标顺利分成左边全为1右边全为2，我们就认为这个调度是可串行化的调度</p>
+</blockquote>
+<h3 id="_8">调度的状态等价性</h3>
+<p>定义9.4 我们称一个调度是状态==可串行的==，如果它的状态等价于一个串行调度。</p>
+<ul>
+<li>可串行化调度的充分条件</li>
+<li>
+<p>一个调度S在保证冲突操作的次序不变的情况下, 通过交换两个事务不冲突操作的次序得到另一个调度S’ , 如果S’是串行的, 称调度S为==冲突可串行化的调度==</p>
+</li>
+<li>
+<p>一个调度是冲突可串行化，一定是==状态可串行==的（可串行化的调度）</p>
+</li>
+<li>冲突可串行化调度是可串行化调度的充分条件，不是必要条件。还有不满足冲突可串行化条件的可串行化调度</li>
+</ul>
+<p>[例]有3个事务</p>
+<p>T1=<u>W1(Y)W1(X)</u>，T2===W2(Y)W2(X)==，T3=<strong>W3(X)</strong></p>
+<p>调度L1=<u>W1(Y)W1(X)</u>==W2(Y)W2(X)== <strong>W3(X)</strong>是一个串行调度</p>
+<p>调度L2=W1(Y)==W2(Y)W2(X)==W1(X)<strong>W3(X)</strong>不满足冲突可串行化</p>
+<ul>
+<li>因为每对操作都是冲突的，不能交换</li>
+<li>但是调度L2是可串行化的。因为L2执行的==结果==与调度L1==相同==，Y的值都等于T2的值，X的值都等于T3的值 </li>
+</ul>
+<h2 id="_9">锁</h2>
+<ul>
+<li>确切的控制是由封锁的类型决定的。</li>
+<li>共享锁（Share lock，简记为S锁,又称为==读锁==）<ul>
+<li>若事务T对数据对象A加上S锁，则其它事务只能再对A加S锁，而不能加X锁，直到T释放A上的S锁</li>
+<li>保证其他事务可以获得对象A的S锁、读取A，但在T释放A上的S锁之前不能对A做任何修改 </li>
+</ul>
+</li>
+<li>排它锁（eXclusive lock，简记为X锁,又称为==写锁==）<ul>
+<li>若事务T对数据对象A加上X锁，则只允许T读取和修改A，其它任何事务都不能再对A加任何类型的锁，直到T释放A上的锁</li>
+</ul>
+</li>
+</ul>
+<h3 id="_10">锁的相容矩阵</h3>
+<p>| <img alt="image-20230615144119818" src="../snippet.assets/image-20230615144119818.png"/> | Y，相容的请求
+<br/>N，不相容的请求 |
+| ------------------------------------------------------------ | ---------------------------------- |</p>
+<ul>
+<li>列表示事务T1已经获得的数据对象上的锁的类型，其中横线表示没有加锁。</li>
+<li>行表示事务T2对同一数据对象发出的封锁请求</li>
+<li>T2的封锁请求能否被满足用矩阵中的Y和N表示</li>
+<li>Y表示事务T2的封锁要求与T1已持有的锁相容，封锁请求可以满足</li>
+<li>N表示T2的封锁请求与T1已持有的锁冲突，T2的请求被拒绝</li>
+</ul>
+<h2 id="_11">封锁协议</h2>
+<ul>
+<li>封锁协议</li>
+<li>运用封锁方法时，对数据对象加锁时需要约定一些规则 <ul>
+<li>何时申请封锁</li>
+<li>持锁时间</li>
+<li>何时释放封锁等</li>
+</ul>
+</li>
+</ul>
+<h3 id="1_1">1．一级封锁协议</h3>
+<p>事务T在修改数据A前必须==先对其加X锁==，直到事务结束才释放 ：</p>
+<ul>
+<li>符合一级封锁协议</li>
+<li>没有丢失修改 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>✔没有丢失更新</th>
+<th>❌保证可重复读</th>
+<th>❌不读“脏”数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="image-20230615144759351" src="../snippet.assets/image-20230615144759351.png"/></td>
+<td><img alt="image-20230615144912504" src="../snippet.assets/image-20230615144912504.png"/></td>
+<td><img alt="image-20230615144916216" src="../snippet.assets/image-20230615144916216.png"/></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>一级封锁协议在==读数据时不加锁==，所以不能保证可重复读和不读“脏”数据。</li>
+</ul>
+<h3 id="2_1">2．二级封锁协议</h3>
+<ul>
+<li>二级封锁协议规定：</li>
+<li>==在一级封锁协议基础上==,事务T在读数据A之前必须先对其加S锁，读完后即可释放S锁 </li>
+<li>增加二级封锁协议的目的是==防止读“脏”数据== </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>✔没有丢失更新</th>
+<th>❌保证可重复读</th>
+<th>✔不读“脏”数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="image-20230615145833423" src="../snippet.assets/image-20230615145833423.png"/></td>
+<td><img alt="image-20230615145522437" src="../snippet.assets/image-20230615145522437.png"/></td>
+<td><img alt="image-20230615145821540" src="../snippet.assets/image-20230615145821540.png"/></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3_1">3．三级封锁协议</h3>
+<ul>
+<li>三级封锁协议：</li>
+<li>==在二级封锁协议基础上==，某一事务施加的S锁要保持到该事务结束时才释放。 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230615150014882" src="../snippet.assets/image-20230615150014882.png"/></th>
+<th>✔没有丢失更新<br/>✔不读“脏”数据<br/>✔保证可重复读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_12">一致性保证</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>X锁</th>
+<th>👈</th>
+<th>S锁</th>
+<th>👈</th>
+<th>一致性保证</th>
+<th>👈</th>
+<th>👈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>操作结束释放</td>
+<td>事务结束释放</td>
+<td>操作结束释放</td>
+<td>事务结束释放</td>
+<td>不丢失修改</td>
+<td>不读脏数据</td>
+<td>可重复读</td>
+</tr>
+<tr>
+<td>一级封锁协议</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>二级封锁协议</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>三级封锁协议</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_13">活锁</h2>
+<p>封锁技术可以有效地解决并行操作的一致性问题，但也带来一些新的问题：死锁，活锁</p>
+<ul>
+<li>活锁：在数据库系统中活锁是指某个事务由于请求封锁，但总也得不到锁而==长时间处于等待状态==</li>
+</ul>
+<p><img alt="image-20230615150349693" src="../snippet.assets/image-20230615150349693.png"/></p>
+<ul>
+<li>如何避免活锁</li>
+<li>采用先来先服务的策略：<ul>
+<li>当多个事务请求封锁同一数据对象时,按请求封锁的先后次序对这些事务排队</li>
+<li>该数据对象上的锁一旦释放，首先批准申请队列中第一个事务获得锁。</li>
+</ul>
+</li>
+</ul>
+<h2 id="_14">死锁</h2>
+<p>死锁是指在同时处于等待状态的两上或多个事务中相互封锁了对方请求的资源，使得没有任何一个事务可以获得足够的资源运行完毕，而永远等待下去。</p>
+<p>| <img alt="image-20230615150541521" src="../snippet.assets/image-20230615150541521.png"/> | - 如事务T1，已封锁了数据R1，而事务T2，封锁了数据R2，
+- T1又继续请求封锁R2，因T2已经封锁了R2，因而T1等待T2释放R2；
+- 接着而T2又继续请求封锁R1，因T1已经封锁了R1，因而T2等待T1释放R1。
+- T1、T2相互等待对方释放锁，形成死锁 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |</p>
+<p>解决死锁的方法</p>
+<ol>
+<li>预防死锁</li>
+<li>允许死锁发生
+死锁的诊断与解除</li>
+</ol>
+<h3 id="_15">预防死锁</h3>
+<ul>
+<li>分析产生死锁的原因</li>
+<li>两个或多个事务都已封锁了一些数据对象，</li>
+<li>然后又都请求对已被其他事务封锁的数据对象加锁</li>
+<li>出现死等待。</li>
+<li>预防死锁的发生就是要破坏产生死锁的条件</li>
+<li>预防死锁的方法</li>
+<li>一次封锁法</li>
+<li>顺序封锁法</li>
+<li>事务重试法 </li>
+</ul>
+<h3 id="_16">死锁的检测与恢复</h3>
+<ul>
+<li>
+<p>允许死锁发生</p>
+</li>
+<li>
+<p>解除死锁</p>
+</li>
+<li>
+<p>由DBMS的并发控制子系统定期检测系统中是否存在死锁</p>
+</li>
+<li>
+<p>一旦检测到死锁，就要设法解除</p>
+<ul>
+<li>选择一个处理死锁代价最小的事务，将其撤消,释放此事务持有的所有的锁，使其它事务能继续运行下去。</li>
+<li>被撤销的事务需要回滚</li>
+</ul>
+</li>
+<li>
+<p>事务等待图法</p>
+</li>
+<li>
+<p>用事务等待图动态反映所有事务的等待情况</p>
+</li>
+<li>
+<p>事务等待图是一个有向图G=(V，U)</p>
+<ul>
+<li>
+<p>V为结点的集合，每个结点表示正运行的事务</p>
+</li>
+<li>
+<p>U为边的集合，每条边表示事务等待的情况</p>
+</li>
+</ul>
+</li>
+<li>
+<p>若V1等待V2，则V1，V2之间画一条有向边，从V1指向V2</p>
+</li>
+<li>
+<p>并发控制子系统周期性地（比如每隔1 min）检测事务等待图，如果发现图中存在回路，则表示系统中出现了死锁。</p>
+</li>
+</ul>
+<p><img alt="image-20230615150849899" src="../snippet.assets/image-20230615150849899.png"/></p>
+<blockquote>
+<p>只要破坏环就可以解锁了。</p>
+</blockquote>
+<h2 id="_17">两阶段封锁协议</h2>
+<ul>
+<li>两阶段封锁协议(Two-Phase Locking，简称2PL)是最常用的一种封锁协议</li>
+<li>
+<p>理论上可以证明使用两段封锁协议产生的是可串行化调度</p>
+</li>
+<li>
+<p>两阶段封锁协议指所有事务必须分两个阶段对数据项加锁和解锁</p>
+</li>
+<li>
+<p>在对任何数据进行读、写操作之前，事务首先要获得对该数据的封锁</p>
+</li>
+<li>
+<p>在释放一个封锁之后,事务不再获得任何其他封锁</p>
+</li>
+<li>
+<p>==两阶段封锁协议是保证并发调度可串行性的封锁协议==</p>
+</li>
+<li>
+<p>“两阶段”锁的含义:事务分为两个阶段</p>
+</li>
+<li>第一阶段是获得封锁，也称为扩展阶段。<ul>
+<li>在这阶段,事务可以申请获得任何数据项上的任何类型的锁，但是不能释放任何锁</li>
+</ul>
+</li>
+<li>第二阶段是释放封锁，也称为收缩阶段。<ul>
+<li>在这阶段,事务可以释放任何数据项上的任何类型的锁，但是不能再申请任何锁。</li>
+</ul>
+</li>
+</ul>
+<p>例：事务1遵守两阶段封锁协议，事务2不遵守两阶段封锁协议</p>
+<pre><code class="language-sql">Slock A ... Slock B ... Xlock C ... Unlock B ... Unlock A ... Unlock C
+Slock A ... Unlock A ... Slock B ... Xlock C ... Unlock C ... Unlock B
+</code></pre>
+<ul>
+<li>并行执行的所有事务均遵守两阶段封锁协议，则对这些事务的所有并行调度策略都是可串行化的。</li>
+<li>所有遵守两阶段封锁协议的事务，其并行执行的结果一定是正确的</li>
+<li>事务遵守两段锁协议是可串行化调度的==充分条件==，而==不是必要条件==</li>
+<li>
+<p>可串行化的调度中，不一定所有事务都必须符合两阶段封锁协议。</p>
+</li>
+<li>
+<p>两阶段封锁协议与防止死锁的一次封锁法</p>
+</li>
+<li>一次封锁法要求每个事务必须一次将所有要使用的数据全部加锁，否则就不能继续执行，因此一次封锁法遵守两段锁协议</li>
+<li>但是两阶段封锁协议并不要求事务必须一次将所有要使用的数据全部加锁，因此遵守两阶段封锁协议的事务可能发生死锁</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>遵守两阶段封锁协议的事务发生死锁</th>
+<th><img alt="image-20230615151333935" src="../snippet.assets/image-20230615151333935.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_18">多粒度封锁</h2>
+<ul>
+<li>选择封锁粒度的原则</li>
+<li>封锁的粒度越                  大，小，</li>
+<li>系统被封锁的对象         少，多，</li>
+<li>并发度                             小，高，</li>
+<li>系统开销                         小，大，</li>
+<li>
+<p>选择封锁粒度考虑封锁机构和并发度两个因素，对系统开销与并发度进行权衡</p>
+<ul>
+<li>需要处理多个关系的大量元组的用户事务：以数据库为封锁单位；</li>
+<li>需要处理大量元组的用户事务:以关系为封锁单元</li>
+<li>只处理少量元组的用户事务：以元组为封锁单位</li>
+</ul>
+</li>
+<li>
+<p>多粒度树</p>
+</li>
+<li>以树形结构来表示多级封锁粒度</li>
+<li>根结点是整个数据库，表示最大的数据粒度</li>
+<li>叶结点表示最小的数据粒度</li>
+<li>例：三级粒度树。根结点为数据库，数据库的子结点为关系，关系的子结点为元组。</li>
+</ul>
+<p><img alt="image-20230615152637040" src="../snippet.assets/image-20230615152637040.png"/></p>
+<ul>
+<li>多粒度封锁协议</li>
+<li>允许多粒度树中的每个结点被独立地加锁</li>
+<li>对一个结点加锁意味着这个==结点的所有后裔结点也被加以同样类型的锁==</li>
+<li>
+<p>在多粒度封锁中一个==数据对象可能以两种方式封锁==，封锁的效果是一样的</p>
+<ul>
+<li>显式封锁: 直接加到数据对象上的封锁</li>
+<li>隐式封锁: 由于其上级结点加锁而使该数据对象加上了锁</li>
+</ul>
+</li>
+<li>
+<p>系统检查封锁冲突时    怎么办？</p>
+</li>
+<li>要检查显式封锁、还要检查隐式封锁</li>
+<li>对某个数据对象加锁时系统检查的内容<ul>
+<li>该数据对象：</li>
+<li>有无显式封锁与之冲突</li>
+<li>所有上级结点</li>
+<li>检查本事务的显式封锁是否与该数据对象上的隐式封锁冲突 ——==由上级结点封锁造成的==</li>
+<li>所有下级结点</li>
+<li>检查本事务的隐式封锁是否与该数据对象上的显式封锁冲突——==将加到下级结点的封锁==</li>
+</ul>
+</li>
+</ul>
+<h3 id="_19">意向锁</h3>
+<ul>
+<li>引进意向锁（intention lock）目的</li>
+<li>提高对某个数据对象加锁时系统的检查效率</li>
+<li>什么是意向锁</li>
+<li>对任一结点加基本锁，必须先对它的上层结点加意向锁</li>
+<li>如果对一个结点加意向锁，则说明该结点的下层结点正在被加锁</li>
+<li>例：对任一元组 t 加锁，先对关系R加意向锁</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230615152941692" src="../snippet.assets/image-20230615152941692.png"/></th>
+<th><img alt="image-20230615153129519" src="../snippet.assets/image-20230615153129519.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>意向共享锁(Intent Share Lock，简称IS锁)</li>
+<li>如果对一个数据对象加IS锁，表示它的后裔结点拟(意向)加S锁。例:要对某个元组加S锁，则要先对关系和数据库加IS锁</li>
+<li>意向排它锁(Intent Exclusive Lock，简称IX锁)</li>
+<li>如果对一个数据对象加IX锁，表示它的后裔结点拟(意向)加X锁。例:要对某个元组加X锁，先要对关系和数据库加IX锁</li>
+<li>共享意向排它锁(Share Intent Exclusive Lock,简称SIX锁)</li>
+<li>如果对一个数据对象加SIX锁，表示对它加S锁，再加IX锁，即SIX = S + IX。例：对某个表加SIX锁，则表示该事务要读整个表（所以要对该表加S锁），同时会更新个别元组（所以要对该表加IX锁）</li>
+</ul>
+<h3 id="_20">意向锁的相容矩阵</h3>
+<blockquote>
+<p>在理解相容矩阵时可以这样去理解而不用死记硬背：</p>
+<p>X：写全表</p>
+<p>IX：写其中某一行</p>
+<p>S：读全表</p>
+<p>IS：读其中某一行</p>
+<p>SIX：读全表而写其中某一行</p>
+<p>这样就很方便理解下面矩阵了，而且也很经得起推敲，比如</p>
+<p>IX和SIX是否相容：</p>
+<p>一个事务申请写其中某一行，另外一个事务申请读全表，肯定不相容；</p>
+<p>IX和IX是否相容：</p>
+<p>一个事务申请写其中某一行，另一个事务申请写其中某一行，相容（只要不是同一行）；</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">意向锁的相容矩阵</th>
+<th align="center">锁的强度的偏序关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230615153543541" src="../snippet.assets/image-20230615153543541.png"/></td>
+<td align="center"><img alt="image-20230615153628210" src="../snippet.assets/image-20230615153628210.png"/></td>
+</tr>
+<tr>
+<td align="center">针对于两个事务所申请的锁</td>
+<td align="center">针对于一个事务</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>锁的强度</li>
+<li>锁的强度是指它对其他锁的排斥程度</li>
+<li>
+<p>一个事务在申请封锁时以强锁代替弱锁是安全的，反之则不然</p>
+</li>
+<li>
+<p>具有意向锁的多粒度封锁方法</p>
+</li>
+<li>申请封锁时应该按自上而下的次序进行；</li>
+<li>释放封锁时应该按自下而上的次序进行   </li>
+<li>例如：事务T1要对关系R1加S锁</li>
+<li>要首先对数据库加IS锁</li>
+<li>检查==数据库和R1==是否已加了不相容的锁(X或IX)</li>
+<li>不再需要搜索和检查==R1中的元组==是否加了不相容的锁(X锁) </li>
+</ul>
+<p><img alt="image-20230615152637040" src="../snippet.assets/image-20230615152637040.png"/></p>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            回到页面顶部
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: 速记" class="md-footer__link md-footer__link--prev" href="../review/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                上一页
+              </span>
+              速记
+            </div>
+</div>
+</a>
+<a aria-label="下一页: 速记" class="md-footer__link md-footer__link--next" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                下一页
+              </span>
+              速记
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2022 linkdom
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/donglinkang2021" rel="noopener" target="_blank" title="Github | linkdom">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</a>
+<a class="md-social__link" href="https://space.bilibili.com/531177225" rel="noopener" target="_blank" title="Bilibili | 用心的小康同学">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"></path></svg>
+</a>
+<a class="md-social__link" href="https://www.cnblogs.com/linkdom/" rel="noopener" target="_blank" title="Cnblogs | linkdom">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "navigation.tracking", "navigation.index", "navigation.expand", "navigation.sections", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../../../assets/javascripts/bundle.39f04ddb.min.js"></script>
+<script src="../../../mkdocs/javascripts/mathjax.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>
