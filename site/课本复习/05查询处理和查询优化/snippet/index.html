@@ -1,0 +1,1267 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="linkdom" name="author"/>
+<link href="../../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.5.2" name="generator"/>
+<title>五、查询处理和查询优化 - 数据库复习</title>
+<link href="../../../assets/stylesheets/main.9f9400aa.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../../mkdocs/css/unordered-list-symbols.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="orange" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#_1">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="数据库复习" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            数据库复习
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              五、查询处理和查询优化
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="orange" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"></path></svg>
+</label>
+</form>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="标签" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      README
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../DailyNote/">
+      DailyNote
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+      最后一套题总结
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        试题分析
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        课本复习
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="数据库复习" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="数据库复习">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    数据库复习
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/donglinkang2021/DatabaseReview" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</div>
+<div class="md-source__repository">
+    databasereview
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../..">
+        README
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../DailyNote/">
+        DailyNote
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E6%9C%80%E5%90%8E%E4%B8%80%E5%A5%97%E9%A2%98%E6%80%BB%E7%BB%93/">
+        最后一套题总结
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4">
+          试题分析
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="试题分析" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          试题分析
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/0.2011%E5%B9%B4%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90/">
+        各个题型及对应知识点分析
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/1.%E5%A1%AB%E7%A9%BA%E9%A2%98/">
+        1.填空题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/2.%E5%88%A4%E6%96%AD%E9%A2%98/">
+        2.判断题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/3.%E5%8D%95%E9%A1%B9%E9%80%89%E6%8B%A9%E9%A2%98/">
+        3.单项选择题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/4.%E7%AE%80%E7%AD%94%E9%A2%98/">
+        4.简答题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/5.%E7%BB%BC%E5%90%88%E9%A2%98/">
+        5.综合题
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../../%E8%AF%95%E9%A2%98%E5%88%86%E6%9E%90/6.%E8%AE%BE%E8%AE%A1%E9%A2%98/">
+        6.设计题
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5">
+          课本复习
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="课本复习" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+          课本复习
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_1" id="__nav_5_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_1">
+          01数据库系统引论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="01数据库系统引论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_1">
+<span class="md-nav__icon md-icon"></span>
+          01数据库系统引论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/review_detail/">
+        一、数据库系统引论
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../01%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/snippet/">
+        一、数据库系统引论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_2" id="__nav_5_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_2">
+          02数据模型
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="02数据模型" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_2">
+<span class="md-nav__icon md-icon"></span>
+          02数据模型
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../02%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/snippet/">
+        二、数据模型
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_3" id="__nav_5_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_3">
+          03关系数据库
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="03关系数据库" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_3">
+<span class="md-nav__icon md-icon"></span>
+          03关系数据库
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../03%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93/snippet/">
+        三、关系数据库
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_4" id="__nav_5_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_4">
+          04SQL
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="04SQL" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_4">
+<span class="md-nav__icon md-icon"></span>
+          04SQL
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../04SQL/snippet/">
+        四、SQL
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_5" id="__nav_5_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_5">
+          05查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="05查询处理和查询优化" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_5">
+<span class="md-nav__icon md-icon"></span>
+          05查询处理和查询优化
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          五、查询处理和查询优化
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        五、查询处理和查询优化
+      </a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    查询处理过程
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    选择操作的实现
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    连接操作的实现
+  </a>
+<nav aria-label="连接操作的实现" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    嵌套循环法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    索引嵌套循环法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    排序合并法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hash-join">
+    散列连接（Hash Join）法
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    查询优化技术
+  </a>
+<nav aria-label="查询优化技术" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    优化的例子
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    计算处理时间
+  </a>
+<nav aria-label="计算处理时间" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    优化前
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    优化后
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    代数优化策略
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    连接操作的启发
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_6" id="__nav_5_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_6">
+          06数据库的安全性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="06数据库的安全性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_6">
+<span class="md-nav__icon md-icon"></span>
+          06数据库的安全性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/snippet/">
+        六、数据库的安全性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_7" id="__nav_5_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_7">
+          07数据库的完整性
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="07数据库的完整性" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_7">
+<span class="md-nav__icon md-icon"></span>
+          07数据库的完整性
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../07%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7/snippet/">
+        七、数据库的完整性
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_8" id="__nav_5_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_8">
+          08数据库恢复技术
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="08数据库恢复技术" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_8">
+<span class="md-nav__icon md-icon"></span>
+          08数据库恢复技术
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../08%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E6%8A%80%E6%9C%AF/snippet/">
+        八、数据库恢复技术
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_9" id="__nav_5_9" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_9">
+          09并发控制
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="09并发控制" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_9">
+<span class="md-nav__icon md-icon"></span>
+          09并发控制
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../09%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/snippet/">
+        九、并发控制
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_10" id="__nav_5_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_10">
+          10关系数据库设计理论
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="10关系数据库设计理论" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_10">
+<span class="md-nav__icon md-icon"></span>
+          10关系数据库设计理论
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/review/">
+        速记
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../10%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA/snippet/">
+        十、关系数据库设计理论
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_11" id="__nav_5_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_11">
+          11数据库设计
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="11数据库设计" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_11">
+<span class="md-nav__icon md-icon"></span>
+          11数据库设计
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../11%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/snippet/">
+        十一、数据库设计
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5_12" id="__nav_5_12" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5_12">
+          12数据库编程
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="12数据库编程" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_5_12">
+<span class="md-nav__icon md-icon"></span>
+          12数据库编程
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/review/">
+        Review
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../12%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/snippet/">
+        十二、数据库编程
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    查询处理过程
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    选择操作的实现
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    连接操作的实现
+  </a>
+<nav aria-label="连接操作的实现" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    嵌套循环法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    索引嵌套循环法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    排序合并法
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hash-join">
+    散列连接（Hash Join）法
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    查询优化技术
+  </a>
+<nav aria-label="查询优化技术" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+    优化的例子
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+    计算处理时间
+  </a>
+<nav aria-label="计算处理时间" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+    优化前
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+    优化后
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+    代数优化策略
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+    连接操作的启发
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/donglinkang2021/DatabaseReview/edit/main/docs/课本复习/05查询处理和查询优化/snippet.md" title="编辑此页">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="_1">五、查询处理和查询优化</h1>
+<div class="toc">
+<ul>
+<li><a href="#_1">五、查询处理和查询优化</a><ul>
+<li><a href="#_2">查询处理过程</a></li>
+<li><a href="#_3">选择操作的实现</a></li>
+<li><a href="#_4">连接操作的实现</a><ul>
+<li><a href="#_5">嵌套循环法</a></li>
+<li><a href="#_6">索引嵌套循环法</a></li>
+<li><a href="#_7">排序合并法</a></li>
+<li><a href="#hash-join">散列连接（Hash Join）法</a></li>
+</ul>
+</li>
+<li><a href="#_8">查询优化技术</a><ul>
+<li><a href="#_9">优化的例子</a></li>
+<li><a href="#_10">计算处理时间</a><ul>
+<li><a href="#_11">优化前</a></li>
+<li><a href="#_12">优化后</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_13">代数优化策略</a></li>
+<li><a href="#_14">连接操作的启发</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2">查询处理过程</h2>
+<table>
+<thead>
+<tr>
+<th>流程</th>
+<th>步骤</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="image-20230614230405227" src="../snippet.assets/image-20230614230405227.png"/></td>
+<td><img alt="image-20230614230414369" src="../snippet.assets/image-20230614230414369.png"/><br/><img alt="image-20230614230528734" src="../snippet.assets/image-20230614230528734.png"/><br/><img alt="image-20230614230446351" src="../snippet.assets/image-20230614230446351.png"/><br/><img alt="image-20230614230455268" src="../snippet.assets/image-20230614230455268.png"/><br/><img alt="image-20230614230504240" src="../snippet.assets/image-20230614230504240.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">选择操作的实现</h2>
+<ul>
+<li>
+<p>顺序扫描方法</p>
+</li>
+<li>
+<p>实现选择操作最简单的一种方法。</p>
+</li>
+<li>
+<p>该方法按照关系中元组的物理顺序扫描每个元组，检查该元组是否满足选择条件，如果满足则输出</p>
+</li>
+<li>
+<p>这种方法不需要特殊的存取路径，简单、有效，适用于任何关系，尤其适用于被选中的元组数占有较大比例或元组数较少的关系 </p>
+</li>
+<li>
+<p>代价估算如下：</p>
+<ul>
+<li>如果关系R的元组占用的块数为<span class="arithmatex">\(B_R\)</span>（块是数据在磁盘和内存之间传递的单位 ），顺序扫描方法的代价<span class="arithmatex">\(cost=B_R\)</span>。</li>
+<li>如果选择条件是==主键上的相等比较==操作，那么平均搜索一半的文件块才能找到满足条件的元组，因此平均搜索代价<span class="arithmatex">\(cost=B_R/2\)</span>。</li>
+</ul>
+</li>
+<li>
+<p>二分查找法</p>
+</li>
+<li>如果选择条件涉及相等比较，并且物理文件是按照选择字段有序组织的，可以使用二分查找来定位</li>
+<li>二分查找法比顺序扫描方法有效。<ul>
+<li>例如，字段Sno是排序属性，可以用二分查找法实现C2中的选择条件</li>
+</ul>
+</li>
+<li>==如果选择是作用在非排序属性上,代价也会相应增加==</li>
+<li>
+<p>代价估算如下：</p>
+<ul>
+<li>二分查找法是针对文件的物理块进行的，平均搜索代价为$\left \lceil log_2B_R \right \rceil $。</li>
+<li>如果选择是作用在非排序属性上，那么将会有多个块包含所需的元组，代价也会相应增加。</li>
+</ul>
+</li>
+<li>
+<p>使用索引（或散列）的扫描方法</p>
+</li>
+<li>适合选择条件中的属性上有索引(例如B+树索引或Hash索引) </li>
+<li>通过索引先找到满足条件的元组指针，然后通过该指针继续检索满足查询条件的元组。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230614231239661" src="../snippet.assets/image-20230614231239661.png"/></th>
+<th><img alt="image-20230614231258574" src="../snippet.assets/image-20230614231258574.png"/></th>
+<th><img alt="image-20230614231306393" src="../snippet.assets/image-20230614231306393.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>索引扫描算法的代价估算公式：</li>
+<li>①如果选择条件是==相等比较==操作，需要存取索引树中从根结点到叶结点L块，再加上基本表中该元组所在的那一块，所以cost=L+1</li>
+<li>② 如果选择条件涉及==非主键属性的相等比较==，若为B+树索引，如果有S个元组满足条件，若每个满足条件的元组可能会保存在不同块上，最坏情况下cost=L+S。</li>
+<li>③如果比较条件是＞，＞＝，＜，＜＝操作，而且假设有一半的元组满足条件就要存取一半的叶结点，则代价估计cost=L+索引的叶结点数/2+元组占用的块数 /2 </li>
+</ul>
+<h2 id="_4">连接操作的实现</h2>
+<ul>
+<li>连接操作是查询处理中最耗时的操作之一，操作本身开销大，并且可能产生很大的中间结果。</li>
+<li>嵌套循环法</li>
+<li>索引嵌套循环法</li>
+<li>排序合并法</li>
+<li>散列连接（Hash Join）法</li>
+</ul>
+<h3 id="_5">嵌套循环法</h3>
+<table>
+<thead>
+<tr>
+<th align="center">R</th>
+<th align="center">S</th>
+<th align="center">R × S</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><img alt="image-20230614231734912" src="../snippet.assets/image-20230614231734912.png"/></td>
+<td align="center"><img alt="image-20230614231745771" src="../snippet.assets/image-20230614231745771.png"/></td>
+<td align="center"><img alt="image-20230614231756717" src="../snippet.assets/image-20230614231756717.png"/></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>选择哪一个关系用于外循环、哪一个关系用于内循环会给连接的性能带来比较大的差异</li>
+<li>一般使用==较少块的文件作为外循环==文件连接代价较小。</li>
+<li>嵌套循环法==适用于任何条件==的连接   </li>
+</ul>
+<h3 id="_6">索引嵌套循环法</h3>
+<ul>
+<li>在嵌套循环法中，如果两个连接属性中的一个属性上存在索引（或散列），可以使用索引扫描代替顺序扫描。</li>
+<li>例如，在关系S中的属性B上存在索引，</li>
+<li>则对于R中的每个元组(R为外表)，<ul>
+<li>可以通过S的索引查找满足 s[B]＝ t[A]的所有元组</li>
+<li>而不必扫描S中的所有元组，以减少扫描时间</li>
+</ul>
+</li>
+<li>在一般情况下，索引嵌套循环法和嵌套循环法相比，查询的代价可以降低很多</li>
+</ul>
+<h3 id="_7">排序合并法</h3>
+<ul>
+<li>适合连接的诸表已经排好序的情况 </li>
+<li>排序合并法的步骤：</li>
+<li>如果连接的表没有排好序，先对Student表和SC表按连接属性Sno排序 </li>
+<li>取Student表中第一个Sno，依次扫描SC表中具有相同Sno的元组 ，当扫描到Sno不相同的第一个SC元组时，返回Student表扫描它的下一个元组</li>
+<li>再扫描SC表中具有相同Sno的元组，把它们连接起来 </li>
+<li>
+<p>重复上述步骤直到Student 表扫描完</p>
+</li>
+<li>
+<p>==Student表和SC表都只要扫描一遍==</p>
+</li>
+<li>如果两个表原来无序，执行时间要加上对两个表的排序时间</li>
+<li>对于两个大表，先排序后使用排序合并法执行连接，总的时间一般仍会大大减少 </li>
+</ul>
+<h3 id="hash-join">散列连接（Hash Join）法</h3>
+<ul>
+<li>把连接属性作为hash码，用同一个hash函数把R和S中的元组散列到同一个hash文件中</li>
+<li>划分阶段(partitioning phase)：</li>
+<li>对包含较少元组的表(比如R)进行一遍处理</li>
+<li>把它的元组按hash函数分散到hash表的桶中</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><img alt="image-20230614232322859" src="../snippet.assets/image-20230614232322859.png"/></th>
+<th><img alt="image-20230614232329734" src="../snippet.assets/image-20230614232329734.png"/><br/><img alt="image-20230614232436998" src="../snippet.assets/image-20230614232436998.png"/></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>试探阶段(probing phase)：也称为连接阶段(join phase) </li>
+<li>对另一个表(S)进行一遍处理</li>
+<li>把S的元组散列到适当的hash桶中</li>
+<li>把元组与桶中所有来自R并与之相匹配的元组连接起来 </li>
+</ul>
+<h2 id="_8">查询优化技术</h2>
+<p>查询优化的总目标：选择有效策略，求得给定关系表达式的值，使查询代价最小(实际上是较小) </p>
+<ul>
+<li>
+<p>代数优化</p>
+</li>
+<li>
+<p>是关系代数表达式的优化</p>
+</li>
+<li>
+<p>按照一定的规则，改变代数表达式中操作的次序和组合，使查询执行更高效。</p>
+</li>
+<li>
+<p>只改变查询语句中操作的==次序和组合==，不涉及底层的存取路径 </p>
+</li>
+<li>
+<p>基于存取路径的优化</p>
+</li>
+<li>
+<p>合理选择各种操作的存取路径以获得优化效果，</p>
+</li>
+<li>
+<p>需要考虑数据的物理组织和访问路径，以及底层操作算法的选择，</p>
+</li>
+<li>
+<p>涉及数据文件的组织方法、数据值的分布情况等，也称为物理优化 </p>
+</li>
+<li>
+<p>基于代价估算的优化</p>
+</li>
+<li>
+<p>对于多个可选的查询策略, 通过估算执行策略的代价, 从中选择代价最小的作为执行策略</p>
+</li>
+<li>
+<p>在实际的关系数据库中，查询优化的具体实现不完全相同，但往往都综合运用了这些优化技术，以获得较好的查询优化效果</p>
+</li>
+</ul>
+<h3 id="_9">优化的例子</h3>
+<p>【例 5‑2】查询选修“DataBase”课程的学生成绩。用SQL表达如下</p>
+<pre><code class="language-sql">SELECT  SC.Grade
+       FROM  Course，SC
+       WHERE Course.Cno=SC.Cno 
+                      and Course.Cname='DataBase';
+</code></pre>
+<p>等价关系代数表达式
+$$
+\Pi_{Grade}(
+    \sigma_{
+        Course.Cno=SC.Cno 
+        \wedge
+        Course.Cname='DataBase'
+    }(
+        Course\times SC
+    )
+)
+$$
+用自然连接取代"笛卡尔积+选择"可以优化不少：
+$$
+\Pi_{Grade}(
+    \sigma_{
+        Course.Cname='DataBase'
+    }(
+        Course\Join SC
+    )
+)
+$$
+再把具体涉及某个表的选择操作移给它：
+$$
+\Pi_{Grade}(
+    SC
+    \Join
+    \sigma_{
+        Course.Cname='DataBase'
+    }(
+        Course 
+    )
+)
+$$</p>
+<h3 id="_10">计算处理时间</h3>
+<h4 id="_11">优化前</h4>
+<p>具体存储过程，对于：
+$$
+\Pi_{Grade}(
+    \sigma_{
+        Course.Cno=SC.Cno 
+        \wedge
+        Course.Cname='DataBase'
+    }(
+        Course\times SC
+    )
+)
+$$</p>
+<ul>
+<li>首先在内存中尽可能多地装入Course表，留出一块存放SC的元组</li>
+<li>然后，把SC中的每个元组和Course中的每个元组连接, 完成之后，继续读入下一块SC的元组，同样和内存中Course的每个元组连接，依此类推，直到SC表的元组全部处理完毕。</li>
+<li>
+<p>接下来，再把Course表中没有装入的元组尽可能多地装入内存，同样逐块装入SC表的元组去作元组的连接，直到Course表的所有元组全部进行完连接。 </p>
+</li>
+<li>
+<p>SC:10000条，Course:100条,满足条件的元组为100个</p>
+</li>
+<li>假设内存被划分为6块，每块能装10个Course元组或100个SC元组。每次在内存中放5块Course元组和1块SC元组 </li>
+</ul>
+<p>①Course×SC</p>
+<div class="arithmatex">\[
+\begin{align}
+读取总块数 &amp; = 读Course表的块数+读SC表的块数\\
+&amp; ＝ 读Course表的块数+ 读SC表遍数*每遍块数 \\ 
+&amp; = \frac{100}{10}+\frac{100}{10\times 5}\times\frac{10000}{100}\\ 
+&amp; = 10+200 \\ 
+&amp; = 210
+\end{align}
+\]</div>
+<ul>
+<li>==读数据时间===210/20=10.5秒👈读写速度：20块/秒</li>
+<li>中间结果大小 = 10000*100 = <span class="arithmatex">\(10^6\)</span>       (条元组)</li>
+<li>==写中间结果时间=== <span class="arithmatex">\(10^6\)</span> /10/20=5000秒 每块装10个元组</li>
+</ul>
+<p>② <span class="arithmatex">\(\sigma\)</span> 需要将上一步已经连接好的<span class="arithmatex">\(10^6\)</span>个元组重新读入内存，按照选择条件选取满足条件的元组。</p>
+<ul>
+<li>假定内存处理时间忽略，读数据时间=5000秒  与写文件一样,忽略内存处理时间。</li>
+<li>满足条件的元组为100个，可以全部放在内存</li>
+</ul>
+<p>③ <span class="arithmatex">\(\Pi\)</span> 仍为100个元组，可以放在内存中，不需要作I/O操作，同样忽略内存处理时间</p>
+<ul>
+<li>总时间 =10.5＋5000＋5000 = 10010.5秒= 2.78小时</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">优化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><span class="arithmatex">\(\Pi_{Grade}(   \sigma_{      Course.Cno=SC.Cno   \wedge      Course.Cname='DataBase'   }(    Course\times SC    ))\)</span></td>
+</tr>
+<tr>
+<td align="center">选择条件<code>Course.Cno = SC.Cno</code>与笛卡尔积组合成连接操作👇</td>
+</tr>
+<tr>
+<td align="center"><span class="arithmatex">\(\Pi_{Grade}(SC   \Join    \sigma_{       Course.Cname='DataBase'    }(       Course     ))\)</span></td>
+</tr>
+<tr>
+<td align="center">条件<code>Course.Cname =‘DataBase’</code>移到连接操作中的关系Course中👇</td>
+</tr>
+<tr>
+<td align="center"><span class="arithmatex">\(\Pi_{Grade}( SC  \Join    \sigma_{       Course.Cname='DataBase'    }(       Course     ))\)</span></td>
+</tr>
+<tr>
+<td align="center">每一次变换都使参加连接的元组大大减少，这就是代数优化</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_12">优化后</h4>
+<p>对于
+$$
+\Pi_{Grade}(    SC  \Join    \sigma_{       Course.Cname='DataBase'    }(       Course     ))
+$$
+假设SC表在Cno上有索引，
+ ① <span class="arithmatex">\(\sigma\)</span></p>
+<ul>
+<li>读Course表总块数= 100/10=10块</li>
+<li>读数据时间 =10/20=0.5秒</li>
+<li>中间结果大小1条  不必写入外存</li>
+</ul>
+<p>②<span class="arithmatex">\(\Join\)</span></p>
+<ul>
+<li>不用读取全部的SC元组，而只需要读入与课程名“DataBase”相对应的课程代码Cno相同的那些元组，那么读入SC的元组数将从10000降到100，</li>
+<li>总块数= 100/100＝1块 </li>
+<li>读数据时间 =1/20=0.05秒</li>
+</ul>
+<p>③<span class="arithmatex">\(\Pi\)</span></p>
+<ul>
+<li>基于索引扫描的方法能进一步提高查询的性能，这就是物理优化</li>
+</ul>
+<h2 id="_13">代数优化策略</h2>
+<ul>
+<li>(1)在关系代数表达式中==尽可能早地执行选择操作==。</li>
+<li>目的：==减小中间关系==  在优化策略中这是最重要、最基本的一条</li>
+<li>(2) ==投影运算和选择运算同时进行==</li>
+<li>目的：避免重复扫描关系<ul>
+<li>如有若干投影和选择运算，并且它们都对同一个关系操作，则可以在扫描此关系的同时完成所有的这些运算以避免重复扫描关系</li>
+</ul>
+</li>
+<li>(3)==将投影运算与其前面或后面的二元运算结合==</li>
+<li>
+<p>目的：减少扫描关系的遍数（为去掉某些属性而扫描一遍关系）</p>
+</li>
+<li>
+<p>(4) 把某些==选择==同在它前面要执行的==笛卡尔积==结合起来成为一个==连接==运算</p>
+</li>
+</ul>
+<div class="arithmatex">\[
+\sigma_{Student.Sno=SC.Sno}(Student\times SC)\\
+\Downarrow  \\  
+Student \Join SC
+\]</div>
+<ul>
+<li>在执行连接操作前对关系适当进行预处理</li>
+<li>按连接属性排序</li>
+<li>在连接属性上建立索引</li>
+</ul>
+<p>【例 5‑3】查询选修了“DataBase”这门课程的计算机学院的学生姓名。用SQL语句表达如下</p>
+<pre><code class="language-sql">SELECT  Student.Sname
+       FROM  Student，SC， Course
+       WHERE  Student.Sno=SC.Sno and Course.Cno= SC.Cno 
+           and Student.Dept='计算机学院' and Course.Cname='DataBase'
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">(1) 把SQL语句转换成查询树</th>
+<th align="left">(2) 转换成关系代数语法树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><img alt="image-20230615095850037" src="../snippet.assets/image-20230615095850037.png"/></td>
+<td align="left"><img alt="image-20230615095909466" src="../snippet.assets/image-20230615095909466.png"/></td>
+</tr>
+<tr>
+<td align="left">（3）对查询树进行优化<br/>变换选择运算 ,得到单独的4个选择操作。尽可能将选择操作移到树的叶端：</td>
+<td align="left">（3）对查询树进行优化(续)<br/>- 每一双目运算<span class="arithmatex">\((\times,\Join,\cup,-)\)</span>和它所有的直接祖先为一组(这些直接祖先是<span class="arithmatex">\(\sigma, \Pi\)</span>运算)<br/>- 如果其后代直到叶子全是单目运算，则也将它们并入该组<br/>- 把上述得到的语法树的内节点分组，得到优化后的查询树</td>
+</tr>
+<tr>
+<td align="left"><img alt="image-20230615100115948" src="../snippet.assets/image-20230615100115948.png"/></td>
+<td align="left"><img alt="image-20230615100831992" src="../snippet.assets/image-20230615100831992.png"/></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_14">连接操作的启发</h2>
+<ul>
+<li>
+<p>可以选用嵌套循环方法，并选择其中较小的表，确切地讲是占用存储块数较少的表，作为外表（外循环的表）。</p>
+</li>
+<li>
+<p>理由：</p>
+</li>
+<li>设连接表R与S分别占用的块数为<span class="arithmatex">\(B_R\)</span>与<span class="arithmatex">\(B_S\)</span></li>
+<li>连接操作使用的内存缓冲区块数为K</li>
+<li>分配K-1块给外表</li>
+<li>如果R为外表，则嵌套循环法存取的块数为</li>
+</ul>
+<div class="arithmatex">\[
+B_R + \frac{B_R}{K-1}B_S
+\]</div>
+<ul>
+<li>显然应该选==块数小的表作为外表== </li>
+</ul>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            回到页面顶部
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: 速记" class="md-footer__link md-footer__link--prev" href="../review/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                上一页
+              </span>
+              速记
+            </div>
+</div>
+</a>
+<a aria-label="下一页: Review" class="md-footer__link md-footer__link--next" href="../../06%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/review/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                下一页
+              </span>
+              Review
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2022 linkdom
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+<div class="md-social">
+<a class="md-social__link" href="https://github.com/donglinkang2021" rel="noopener" target="_blank" title="Github | linkdom">
+<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+</a>
+<a class="md-social__link" href="https://space.bilibili.com/531177225" rel="noopener" target="_blank" title="Bilibili | 用心的小康同学">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"></path></svg>
+</a>
+<a class="md-social__link" href="https://www.cnblogs.com/linkdom/" rel="noopener" target="_blank" title="Cnblogs | linkdom">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741 0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792 0 0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "navigation.tracking", "navigation.index", "navigation.expand", "navigation.sections", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../../../assets/javascripts/bundle.39f04ddb.min.js"></script>
+<script src="../../../mkdocs/javascripts/mathjax.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>
